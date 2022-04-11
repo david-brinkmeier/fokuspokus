@@ -1,6 +1,6 @@
 # ISO11146 Laser Beam Analyzer
 
-![](!docs/img/0_splash.png?raw=true "splash")
+![](!docs/img/0_splash.png?raw=true)
 
 ## Overview
 - This code can be used for ISO11146 analysis of stigmatic and simple astigmatic lasers.
@@ -12,7 +12,7 @@
 - (Make sure to record enough near- and far-field images for a robust fit of the caustic hyperbola.)
 - (Note: Background subtraction using a dark image/video is *risky* without specific knowledge of the behaviour of your camera system and setup. Pre-process your images this way if you are certain you are not compromising the data.)
 
-## Usage
+## How do I use this?
 - **Without Installation, MATLAB >= 2021a**
   - Simply start the GUI via [startGUI.m](startGUI.m).
   - If you enable some of the debugging features the image processing toolbox is required.
