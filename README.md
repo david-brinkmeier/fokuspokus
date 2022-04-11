@@ -20,7 +20,7 @@
   - For custom data input analyze your data via script: [analyze_example.m](analyze_example.m).
 
 - **Using the installer**
-  - Install the application using the [installer](/binaries/IFSW_BeamAnalyzer_standalone/for_redistribution)
+  - Install the application using the [installer](/binaries/IFSW_BeamAnalyzer_standalone/for_redistribution).
   - The binaries require the R2021a (9.10) runtime. The installer will download the required dependencies. A full installation of MATLAB is not required.
 
 ## Workflow using GUI and single images
