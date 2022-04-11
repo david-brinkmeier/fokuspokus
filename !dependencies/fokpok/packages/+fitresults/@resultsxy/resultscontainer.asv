@@ -1,0 +1,44 @@
+classdef resultscontainer
+    
+    properties (Access = public)
+        x                       (1,1) fitresults.results_iso11146
+        y                       (1,1) fitresults.results_iso11146
+        delta_xy                (1,1) double
+        msquared_effective      (1,1) double
+        intrinsic_stigmatic     (1,1) logical
+    end
+    
+    properties (SetAccess = protected)
+    end
+    
+    properties (Access = private)
+    end
+    
+    properties (Dependent)
+    end
+    
+    %%
+    methods
+        function obj = resultscontainer()
+        end
+    end
+    
+    methods (Static)
+        function obj = fit_iso11146(obj,imageMoments,zpos,pixelpitch,wavelength,weighted)           
+            % init output
+            results = struct();
+            
+            % fit caustic
+            x = fitcaustic(obj.x,wavelength,zpos,imageMoments.dx*pixelpitch,weighted);
+            y = fitcaustic(wavelength,zpos,imageMoments.dy*pixelpitch,weighted);
+            
+            % calc dependent variables
+            obj.deltaz_xy = abs(obj.x.z0-obj.y.z0); % astigmatic waist distance (difference)
+            obj.msquared_effective = sqrt(obj.x.msquared*obj.y.msquared); % ISOTR 11146 eq. (49)
+            obj.intrinsic_stigmatic = ((0.5*(obj.x.msquared-obj.y.msquared)^2)/obj.msquared_effective^2) < 0.039; % ISOTR 11146-3 eq. (50), (52)
+            
+        end
+        
+    end
+    
+end
