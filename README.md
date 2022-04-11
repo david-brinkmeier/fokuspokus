@@ -24,7 +24,7 @@
   - The binaries require the R2021a (9.10) runtime. The installer will download the required dependencies. A full installation of MATLAB is not required.
 
 ## Workflow using GUI and single images
-- Start the GUI/App
+- Start the GUI/App.
 
 ![](!docs/img/1_main.PNG?raw=true)
 
@@ -32,7 +32,7 @@
 
 ![](!docs/img/2_selector.png?raw=true)
 
-- Adjust analysis / plot settings if required
+- Adjust analysis / plot settings if required.
 
 ![](!docs/img/3_settings_overview.png?raw=true)
 
@@ -40,7 +40,7 @@
 
 ![](!docs/img/4_results_pp.png?raw=true)
 
-- And export the data to .xlsx / .mat
+- And export the data to .xlsx / .mat.
 
 ![](!docs/img/5_results_overview.png?raw=true)
 
