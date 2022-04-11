@@ -1,6 +1,6 @@
 # Beamfit
 
-![](docs/logo.png?raw=true "beamfit")
+![](!docs/img/0_splash.png?raw=true "splash")
 
 ## Offline and Online analysis for laser beams
   - Least square elliptical rotated Gaussian fit (D4σ specification), cf. [docs](docs/).
