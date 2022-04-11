@@ -24,7 +24,7 @@
   - The binaries require the R2021a (9.10) runtime. The installer will download the required dependencies. A full installation of MATLAB is not required.
 
 ## Workflow using GUI and single images
-- Start the GUI
+- Start the GUI/App
 
 ![](!docs/img/1_main.PNG?raw=true)
 
@@ -44,10 +44,6 @@
 
 ![](!docs/img/5_results_overview.png?raw=true)
 
-
-## Workflow
-- test
-
 ## Additional materials / Youtube (German)
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=PEa2JmkxwxU
@@ -57,7 +53,7 @@ alt="Presentation (German)" width="240" height="180" border="10" /></a>
 ## Disclaimer
 
 - Code is provided "as is".
-- [Please forward errors and suggestions to me via mail.](mailto:david.brinkmeier@ifsw.uni-stuttgart.de)
+- [Please forward bugs, errors and suggestions via mail.](mailto:david.brinkmeier@ifsw.uni-stuttgart.de)
 
 [ifsw]: <https://www.ifsw.uni-stuttgart.de/en/>
 [refFokPok]: <https://doi.org/10.1117/12.2079037>
