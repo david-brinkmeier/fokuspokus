@@ -26,7 +26,7 @@
 ## Workflow using GUI and single images
 - Start the GUI
 
-![](!docs/img/1_main.png?raw=true)
+![](!docs/img/1_main.PNG?raw=true)
 
 - Load and tag your images / specify pixelpitch and wavelength.
 
