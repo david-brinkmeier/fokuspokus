@@ -8,7 +8,7 @@
 - However, most of the code can be used offline script-based or via the GUI if a series of beam profiles are provided.
   - The latter is a scenario often encountered at the IFSW, as most processing stations are equipped with axis systems and appropriate camera systems.
 
-- All you need to do is record images of your beam profiles along the caustic using your camera system.
+- All you need to do is record images of your beam profiles along the caustic using your camera system. If you use additional optical elements and filters ensure they don't introduce ghosting and/or aberrations.
 - (Make sure to record enough near- and far-field images for a robust fit of the caustic hyperbola.)
 - (Note: Background subtraction using a dark image/video is *risky* without specific knowledge of the behaviour of your camera system and setup. Pre-process your images this way if you are certain you are not compromising the data.)
 
