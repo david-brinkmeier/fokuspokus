@@ -1,4 +1,7 @@
 classdef statusTextBox < handle
+    % Helper class / wrapper using msgbox as a reporting tool to give user
+    % feedback, similar to command window but one-way
+    %
     % e.g. fokpokgui.statusTextBox(2,30,12,'non-modal','info');
     % opens a non-modal text box with 2 extra lines, width 30, fontsize 12
     % icon can be [info,warn,error]
@@ -7,7 +10,7 @@ classdef statusTextBox < handle
     % append text using obj.addText('test');
     % make newline using obj.newLine();
     % or provide the string with \n; but in that case \n will ALWAYS
-    % be applied AFTER the string. e.g. addText('\ntest') is the same as 
+    % be applied AFTER the string. e.g. addText('\ntest') is the same as
     % addText('test\n') or addText(sprintf('test\n'))
     %
     % to kill the figure use obj.kill(); after killDelay figure closes
@@ -19,7 +22,7 @@ classdef statusTextBox < handle
     % background
     % 'modal' doesn't allow user to interact while this fig exists
     %
-    % if something (condition ) happens during execution which requires 
+    % if something (condition ) happens during execution which requires
     % user to acknowledge, set uiwait(obj.hfig) in your code
     % code will resume after user clicks OK / closes fig
     % when type is set to error then this is done automatically upon set

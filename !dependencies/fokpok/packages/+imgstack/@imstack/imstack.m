@@ -1,6 +1,5 @@
 classdef imstack
-    % first and second centered moments in unit/pixel coordinates per
-    % ISO 11146 specification
+    % manages all data / structures for beam profile analysis
     
     properties (Access = public)
         pixelpitch      (1,1)   double

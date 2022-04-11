@@ -1,5 +1,6 @@
 classdef stats
-    % holds settings specific to plots
+    % internal stats
+    % report available in GUI in through process "help" when non-empty
     
     properties (Access = public)
     end
@@ -34,10 +35,6 @@ classdef stats
             obj.autoROIcounter = 0;
         end
         
-        %% setter
-        
-        
-        %% getter
         function val = get.tcalcAnalysisAVG(obj)
             val = obj.tcalcAnalysisTotal/double(obj.counter);
         end
@@ -54,7 +51,6 @@ classdef stats
         
     end
     
-    %% private
     methods (Access = public)
         function obj = updatestats(obj,tAnalysis,tPlot,guiROIdone,autoROIdone)
             % analysis times
@@ -76,7 +72,6 @@ classdef stats
         
     end
     
-    %% static
     methods (Static)
     end
     

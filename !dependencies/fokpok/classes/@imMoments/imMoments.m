@@ -1,6 +1,5 @@
 classdef imMoments
-    % first and second centered moments in unit/pixel coordinates per
-    % ISO 11146 specification
+    % calculates first and second centered moments in unit/pixel coordinates
     
     properties (SetAccess = protected)
         type                char        % analysis can be "cog" or "all", CenterOfGravity skips 2nd moments

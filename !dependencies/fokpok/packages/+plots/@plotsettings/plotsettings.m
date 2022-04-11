@@ -1,5 +1,5 @@
 classdef plotsettings < handle
-    % holds settings specific to plots
+    % holds all settings specific to plots
     
     properties (Access = public)
         enable                  (1,1) logical   % disabled or enables plot

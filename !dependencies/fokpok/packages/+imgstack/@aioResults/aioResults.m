@@ -3,7 +3,7 @@ classdef aioResults
     % gradually but apparently preallocation in matlab OOP doesn't work
     % that way...even just using all the getters slows execution down
     % massively
-    % current variant: write tmp files every 5k measurements
+    % current variant: write tmp files every k measurements
     % generate complete files upon trigger
     
     % --- USAGE ---

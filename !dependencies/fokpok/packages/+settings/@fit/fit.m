@@ -1,6 +1,4 @@
 classdef fit < handle
-    % first and second centered moments in unit/pixel coordinates per
-    % ISO 11146 specification
     
     properties (Access = public)
         weighted            (1,1) logical
