@@ -3,7 +3,14 @@
 ![](!docs/img/0_splash.png?raw=true "splash")
 
 ## Overview
-  - This code was developed to be used with a [proprietary system][refFokPok] developed at [IFSW University of Stuttgart][ifsw]
+- This code can be used for ISO11146 analysis of stigmatic and simple astigmatic lasers.
+- This code was developed to be used with a [proprietary system][refFokPok] developed at [IFSW University of Stuttgart][ifsw] for online analysis.
+- However, most of the code can be used offline script-based or via the GUI if a series of beam profiles are provided.
+  - The latter is a scenario often encountered at the IFSW, as most processing stations are equipped with axis systems and appropriate camera systems.
+
+- All you need to do is record images of your beam profiles along the caustic using your camera system.
+- (Make sure to record enough near- and far-field images for a robust fit of the caustic hyperbola.)
+- (Note: Background subtraction using a dark image/video is *risky* without specific knowledge of the behaviour of your camera system and setup. Pre-process your images this way if you are certain you are not compromising the data.)
 
 - **Offline analysis supports image and video processing**
   - Examples and results for usage with [example_general_purpose.m](example_general_purpose.m) are provided in the [examples](examples/).
@@ -24,7 +31,7 @@
 ## Workflow
 - test
 
-## Additional materials
+## Additional materials / Youtube (German)
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=PEa2JmkxwxU
 " target="_blank"><img src="http://img.youtube.com/vi/PEa2JmkxwxU/0.jpg" 
@@ -32,7 +39,8 @@ alt="Presentation (German)" width="240" height="180" border="10" /></a>
 
 ## Disclaimer
 
-- Code is provided "as is". If you need certified measurements, use certified measurement hardware and software!
+- Code is provided "as is".
+- [Please forward errors and suggestions to me via mail.](mailto:david.brinkmeier@ifsw.uni-stuttgart.de?subject=[GitHub]%20Source%20Han%20Sans)
 
 [ifsw]: <https://www.ifsw.uni-stuttgart.de/en/>
 [refFokPok]: <https://doi.org/10.1117/12.2079037>
