@@ -15,20 +15,35 @@
 ## Usage
 - **Without Installation, MATLAB >= 2021a**
   - Simply start the GUI via [startGUI.m](startGUI.m).
+  - If you enable some of the debugging features the image processing toolbox is required.
   - It is recommended to experiment with the GUI and [test datasets](/TestData) first.
-  - For custom data input analyze your data via script: [analyze_example](analyze_example.m).
+  - For custom data input analyze your data via script: [analyze_example.m](analyze_example.m).
 
 - **Using the installer**
-  - Install the application using the [installer](/binaries/IFSW_BeamAnalyzer_standalone´)
-  - The binaries require the R2021a (9.10) runtime. The installer will download the required dependencies if required. A full installation of MATLAB is not required.
+  - Install the application using the [installer](/binaries/IFSW_BeamAnalyzer_standalone)
+  - The binaries require the R2021a (9.10) runtime. The installer will download the required dependencies. A full installation of MATLAB is not required.
 
-## What do I need?
-  - Built-in functionality includes various DC-offset removal / noise removal techniques including 
-  [noisecomp][kovesi] from Peter Kovesi and [TV-L1 denoising][tvl1] from Manolis Lourakis.
-  - Automated and/or GUI-cropping / pre-scaling of input for faster fitting etc.
-  - Why image cleanup? Second-order moment determination of beam diameter/radius is particularly prone to measurement noise.
-    - Warning: Due to the definition of beam diameter through the second order moments this means it's also possible to effectively falsify the ISO11146 measurement through usage of excessive denoising.
-  - Additionally / alternatively an offset background image which is subtracted from the input may be provided.
+## Workflow using GUI and single images
+- Start the GUI
+
+![](!docs/img/1_main.png?raw=true)
+
+- Load and tag your images / specify pixelpitch and wavelength.
+
+![](!docs/img/2_selector.png?raw=true)
+
+- Adjust analysis / plot settings if required
+
+![](!docs/img/3_settings_overview.png?raw=true)
+
+- Review / export plots. Some plots are interactive.
+
+![](!docs/img/4_results_pp.png?raw=true)
+
+- And export the data to .xlsx / .mat
+
+![](!docs/img/5_results_overview.png?raw=true)
+
 
 ## Workflow
 - test
