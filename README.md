@@ -1,12 +1,9 @@
-# Beamfit
+# ISO11146 Laser Beam Analyzer
 
 ![](!docs/img/0_splash.png?raw=true "splash")
 
-## Offline and Online analysis for laser beams
-  - Least square elliptical rotated Gaussian fit (D4σ specification), cf. [docs](docs/).
-  - Least square trepanning (rotating on a circular path) symmetrical Gaussian fit (D4σ specification).
-  - Second-order moments / ISO11146 beam width for elliptic beams (D4σ specification).
-    - Based on this [implementation][imagemoments] by Raphaël Candelier with minor adjustments to fit the ISO11146 spec.
+## Overview
+  - This code was developed to be used with a [proprietary system][refFokPok] developed at [IFSW University of Stuttgart][ifsw]
 
 - **Offline analysis supports image and video processing**
   - Examples and results for usage with [example_general_purpose.m](example_general_purpose.m) are provided in the [examples](examples/).
@@ -16,7 +13,7 @@
   - Specification of uEye cameras (Pixel pitch etc.) are auto-detected. Check out the uEye [example](examples/ueye/) to see what it looks like with a beam incident on a diffuser and reimaged onto the sensor, which required heavy post-processing to get a useful online reading for the center of gravity due to speckles.
   - Minor bugfixes were applied to the [uEye-dotnet Matlab library][ueye_lib] from [Dr. Adam Wyatt][adamwyatt].
   
-## Image processing
+## What do I need?
   - Built-in functionality includes various DC-offset removal / noise removal techniques including 
   [noisecomp][kovesi] from Peter Kovesi and [TV-L1 denoising][tvl1] from Manolis Lourakis.
   - Automated and/or GUI-cropping / pre-scaling of input for faster fitting etc.
@@ -24,17 +21,21 @@
     - Warning: Due to the definition of beam diameter through the second order moments this means it's also possible to effectively falsify the ISO11146 measurement through usage of excessive denoising.
   - Additionally / alternatively an offset background image which is subtracted from the input may be provided.
 
-## Features
-- Horrible mess of procedural code, held in place by duct-tape.
-  If I were to do it today, I would do it properly and most likely in Python.
-- That being said, the code works and has proven to be useful in practice. Especially when compared to many proprietary / expensive beam measurement software/hardware bundles.
-- Usage is intended with Camera sensors WITHOUT lens. If you have an imaging system, you need to take the specification of your imaging setup into account.
-If this means nothing to you, a commercial system may be better suited for your purposes.
+## Workflow
+- test
+
+## Additional materials
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=PEa2JmkxwxU
+" target="_blank"><img src="http://img.youtube.com/vi/PEa2JmkxwxU/0.jpg" 
+alt="Presentation (German)" width="240" height="180" border="10" /></a>
 
 ## Disclaimer
 
-- As stated in the license...code provided "as is". If you need certified measurements, use certified measurement hardware and software!
+- Code is provided "as is". If you need certified measurements, use certified measurement hardware and software!
 
+[ifsw]: <https://www.ifsw.uni-stuttgart.de/en/>
+[refFokPok]: <https://doi.org/10.1117/12.2079037>
 [imagemoments]: <http://raphael.candelier.fr/?blog=Image%20Moments>
 [kovesi]: <https://www.peterkovesi.com/matlabfns/>
 [tvl1]: <https://de.mathworks.com/matlabcentral/fileexchange/57604-tv-l1-image-denoising-algorithm/>
