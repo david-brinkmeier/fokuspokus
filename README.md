@@ -12,14 +12,16 @@
 - (Make sure to record enough near- and far-field images for a robust fit of the caustic hyperbola.)
 - (Note: Background subtraction using a dark image/video is *risky* without specific knowledge of the behaviour of your camera system and setup. Pre-process your images this way if you are certain you are not compromising the data.)
 
-- **Offline analysis supports image and video processing**
-  - Examples and results for usage with [example_general_purpose.m](example_general_purpose.m) are provided in the [examples](examples/).
-  - [example_synthetic.m](example_synthetic.m) allows for generation and analysis of noisy rotated offset elliptical Gaussians as well as noisy trepanning offset symmetrical Gaussians for testing purposes.
-- **Online analysis supports IDS uEye cameras through uEyeDotNet.dll**
-  - [example_online_ueye.m](example_online_ueye.m) allows for online usage with uEye cameras. Make sure that the location of the *uEyeDotNet.dll* in the header is correct.
-  - Specification of uEye cameras (Pixel pitch etc.) are auto-detected. Check out the uEye [example](examples/ueye/) to see what it looks like with a beam incident on a diffuser and reimaged onto the sensor, which required heavy post-processing to get a useful online reading for the center of gravity due to speckles.
-  - Minor bugfixes were applied to the [uEye-dotnet Matlab library][ueye_lib] from [Dr. Adam Wyatt][adamwyatt].
-  
+## Usage
+- **Without Installation, MATLAB >= 2021a**
+  - Simply start the GUI via [startGUI.m](startGUI.m).
+  - It is recommended to experiment with the GUI and [test datasets](/TestData) first.
+  - For custom data input analyze your data via script: [analyze_example](analyze_example.m).
+
+- **Using the installer**
+  - Install the application using the [installer](/binaries/IFSW_BeamAnalyzer_standalone´)
+  - The binaries require the R2021a (9.10) runtime. The installer will download the required dependencies if required. A full installation of MATLAB is not required.
+
 ## What do I need?
   - Built-in functionality includes various DC-offset removal / noise removal techniques including 
   [noisecomp][kovesi] from Peter Kovesi and [TV-L1 denoising][tvl1] from Manolis Lourakis.
@@ -40,12 +42,7 @@ alt="Presentation (German)" width="240" height="180" border="10" /></a>
 ## Disclaimer
 
 - Code is provided "as is".
-- [Please forward errors and suggestions to me via mail.](mailto:david.brinkmeier@ifsw.uni-stuttgart.de?subject=[GitHub]%20Source%20Han%20Sans)
+- [Please forward errors and suggestions to me via mail.](mailto:david.brinkmeier@ifsw.uni-stuttgart.de)
 
 [ifsw]: <https://www.ifsw.uni-stuttgart.de/en/>
 [refFokPok]: <https://doi.org/10.1117/12.2079037>
-[imagemoments]: <http://raphael.candelier.fr/?blog=Image%20Moments>
-[kovesi]: <https://www.peterkovesi.com/matlabfns/>
-[tvl1]: <https://de.mathworks.com/matlabcentral/fileexchange/57604-tv-l1-image-denoising-algorithm/>
-[ueye_lib]: <http://matlabtidbits.blogspot.com/2016/12/ueye-camera-interface-in-matlab-net.html>
-[adamwyatt]: <https://www.clf.stfc.ac.uk/Pages/Adam-Wyatt.aspx>
