@@ -44,7 +44,7 @@
 
 ![](!docs/img/5_results_overview.png?raw=true)
 
-## Additional materials / Youtube (German)
+## Additional materials / Youtube (German, English subtitles!)
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=PEa2JmkxwxU
 " target="_blank"><img src="http://img.youtube.com/vi/PEa2JmkxwxU/0.jpg" 
