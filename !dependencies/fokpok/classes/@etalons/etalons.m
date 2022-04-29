@@ -56,19 +56,6 @@ classdef etalons
             obj.dX = dX;
             obj.dY = dY;
             obj.wedgeAngle = deg2rad(wedgeAngle);
-            
-            
-%             obj.laserWavelength = wavelength;
-%             obj.xnum = 4;
-%             obj.ynum = 5;
-%             
-%             obj.flipX = true;
-%             obj.flipY = false;
-%             
-%             obj.dX = 3e-3; % 3mm
-%             obj.dY = 2e-3; % 2.1mm measured, 2mm theory?!
-%             obj.wedgeAngle = deg2rad(45);
-            
         end
         
         function val = get.xnum(obj)
