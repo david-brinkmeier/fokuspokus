@@ -44,6 +44,7 @@ classdef guiMain < handle
             set(obj.h.edit.wavelength,'Callback',{@obj.checkEditBoxes,'wavelength'});
             set(obj.h.pb.connect,'Callback',@(hobj,event) obj.connectCam());
             set(obj.h.pb.camPreview,'Callback',@(hobj,event) obj.camPreview());
+            set(obj.h.pb.etalonSpec,'Callback',@(hobj,event) obj.initEtalonSpec());
             set(obj.h.pb.camWizard,'Callback',@(hobj,event) obj.camWizard());
             set(obj.h.pb.roiSelector,'Callback',@(hobj,event) obj.roiSelector());
             set(obj.h.pb.workingFolder,'Callback',@(hobj,event) obj.requestFolder());
@@ -119,6 +120,14 @@ classdef guiMain < handle
                 if isvalid(obj.h.fig)
                     var = true;
                 end
+            end
+        end
+        
+        function val = get.wavelength(obj)
+            if obj.wavelength <= 0
+                val = [];
+            else
+                val = obj.wavelength;
             end
         end
         
@@ -403,11 +412,10 @@ classdef guiMain < handle
             switch type
                 case 'wavelength'
                     obj.wavelength = input*1e-9;
-                    obj.etalonSpec = etalons(obj.wavelength);
                     if obj.imstackReady && obj.resultsReady
                         warndlg({['\fontsize{11}You have modified the wavelength \lambda after a previous analysis.',...
                                  ' This changes the optical path distances, as the refractive index n of the beam splitters is a function of the wavelength \lambda.'],...
-                                 'You must redo the ROI Selection in order to update the z-Positions of the caustic + the wavelength for the fit!'},...
+                                 'You must redo etalon configuration & the ROI Selection in order to update the z-Positions of the caustic + the wavelength for the fit!'},...
                             'fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
                     end
             end
@@ -426,13 +434,13 @@ classdef guiMain < handle
             % first change figsize
             val = obj.h.panel.inputTab.Selection; % 1: fokpok, 2: standalone
             if val == 1 % 1 = fokpok
-                obj.h.fig.Position(4) = 540;
-                obj.h.mainLayout.Heights = [270,180,90];
-                obj.h.fig.Position(2) = obj.h.fig.Position(2)+355-540;
+                obj.h.fig.Position(4) = 565;
+                obj.h.mainLayout.Heights = [300,180,90];
+                obj.h.fig.Position(2) = obj.h.fig.Position(2)+355-565;
             elseif val == 2 % 2 = standalone
                 obj.h.fig.Position(4) = 355;
                 obj.h.mainLayout.Heights = [85,180,90];
-                obj.h.fig.Position(2) = obj.h.fig.Position(2)+540-355;
+                obj.h.fig.Position(2) = obj.h.fig.Position(2)+565-355;
             end
             obj.updateStateOfGui();
         end
@@ -452,6 +460,20 @@ classdef guiMain < handle
                warndlg('\fontsize{11}Camera is not connected.','fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
            end
            obj.updateStateOfGui()
+        end
+        
+        function initEtalonSpec(obj)
+            if isempty(obj.wavelength)
+                warndlg({['\fontsize{11}Wavelength \lambda must be set first.',...
+                    ' The refractive index n of the beam splitters is a function of the wavelength \lambda.'],...
+                    'The optical path lenghts are calculated as internal variables at this point, the wavelength is required!'},...
+                    'fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
+                return
+            end
+            userSpec = fokpokgui.etalonSpecSelector(obj.wavelength);
+            if userSpec.success
+                obj.etalonSpec = userSpec.etalonSpec;
+            end
         end
         
         function camWizard(obj)

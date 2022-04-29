@@ -32,7 +32,7 @@ classdef etalons
         
         dX              (1,1) double    % gap thickness of first/X etalon
         dY              (1,1) double    % gap thickness of second/Y etalon
-        wedgeAngle      (1,1) double    % etalon wedge angle in degrees
+        wedgeAngle      (1,1) double    % etalon wedge angle in rad
     end
     
     properties (Dependent)
@@ -44,17 +44,33 @@ classdef etalons
     end
     
     methods
-        function obj = etalons(wavelength)
+        function obj = etalons(wavelength,xnum,ynum,flipX,flipY,dX,dY,wedgeAngle)
+            % Defaults highMsquared: [lambda, 4, 5, true, false, 3e-3, 2e-3, 45deg];
+            % etalons(1030e-9, 4, 5, true, false, 3e-3, 2e-3, 45)
+            
             obj.laserWavelength = wavelength;
-            obj.xnum = 4;
-            obj.ynum = 5;
+            obj.xnum = ynum;
+            obj.ynum = xnum;
             
-            obj.flipX = true;
-            obj.flipY = false;
+            obj.flipX = flipX;
+            obj.flipY = flipY;
             
-            obj.dX = 3e-3; % 3mm
-            obj.dY = 2e-3; % 2.1mm measured, 2mm theory?!
-            obj.wedgeAngle = deg2rad(45);
+            obj.dX = dX; % 3mm
+            obj.dY = dY; % 2.1mm measured, 2mm theory?!
+            obj.wedgeAngle = deg2rad(wedgeAngle);
+            
+            
+%             obj.laserWavelength = wavelength;
+%             obj.xnum = 4;
+%             obj.ynum = 5;
+%             
+%             obj.flipX = true;
+%             obj.flipY = false;
+%             
+%             obj.dX = 3e-3; % 3mm
+%             obj.dY = 2e-3; % 2.1mm measured, 2mm theory?!
+%             obj.wedgeAngle = deg2rad(45);
+            
         end
         
         function val = get.xnum(obj)

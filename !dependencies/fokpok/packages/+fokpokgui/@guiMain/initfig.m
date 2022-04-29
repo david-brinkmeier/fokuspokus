@@ -17,7 +17,7 @@ h.fig = figure( ...
     'Resize',0);
 
 figWidth = 260;
-figHeight = 540;
+figHeight = 565;
 screenpos = get(0,'screensize')/2;
 h.fig.Position = [screenpos(3)-figHeight/2,screenpos(4)-figHeight/2,figWidth,figHeight];
 
@@ -61,11 +61,12 @@ HboxTmp.Widths = [139,-1];
 % // Connect gige button
 h.pb.connect = uicontrol('Parent',h.panel.FokPok,'Style','pushbutton','String','Connect','FontSize',10,'FontWeight','normal');
 h.pb.camPreview = uicontrol('Parent',h.panel.FokPok,'Style','pushbutton','String','Cam Preview / Viewer','FontSize',10);
+h.pb.etalonSpec = uicontrol('Parent',h.panel.FokPok,'Style','pushbutton','String','Beam Splitter Configuration','FontSize',10,'FontWeight','normal');
 h.pb.camWizard = uicontrol('Parent',h.panel.FokPok,'Style','pushbutton','String','Cam Wizard','FontSize',10,'FontWeight','normal');
 h.pb.roiSelector = uicontrol('Parent',h.panel.FokPok,'Style','pushbutton','String','ROI Selector','FontSize',10);
 h.pb.workingFolder = uicontrol('Parent',h.panel.FokPok,'Style','pushbutton','String','Select Output Directory','FontSize',10,'FontWeight','normal');
 h.pb.disconnect = uicontrol('Parent',h.panel.FokPok,'Style','pushbutton','String','Disconnect','FontSize',10);
-h.panel.FokPok.Heights = [35,25,25,25,25,25,25];
+h.panel.FokPok.Heights = [35,25,25,25,25,25,25,25];
 % populate inputTab-Standalone
 uix.Empty( 'Parent', h.panel.Standalone); % whitespace left, auto resize this
 h.pb.selectFiles = uicontrol('Parent',h.panel.Standalone,'Style','pushbutton','String','Select Files','FontSize',10,'FontWeight','normal');
@@ -100,7 +101,7 @@ h.pb.saveResults = uicontrol('Parent',VboxTmp,'Style','pushbutton','String','Sav
 VboxTmp.Heights = [25,25];
 
 % set heights
-h.mainLayout.Heights = [270,180,90]; % height 85 for standalone
+h.mainLayout.Heights = [300,180,90]; % height 85 for standalone
 
 obj.h = h;
 end
