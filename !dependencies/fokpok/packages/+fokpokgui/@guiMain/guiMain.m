@@ -193,8 +193,9 @@ classdef guiMain < handle
                     switch obj.guiState
                         case 'fokuspokus'
                             msgbox({'\fontsize{11}{\bfConnect} \color{red}Mandatory to proceed\color{black} Establish connection to gigecam PhotonFocus MV1-D2080.','',...
-                                '{\bfWavelength}','Required to calculate etalon optical path lengths as function of refractive index. Wavelength is required to evaluate Sellmeier equation.','',...
+                                '{\bfWavelength} \color{red}Mandatory to proceed','\color{black}Required to calculate beam splitter optical path lengths as function of refractive index. Wavelength is required to evaluate Sellmeier equation.','',...
                                 '{\bfCamViewer} Optional / use during adjustment procedure. Available settings depend on state of camera.','',...
+                                '{\bfBeam Splitter Configuration} \color{red}Mandatory to proceed','\color{black}Specify the beam splitter that is currently installed using defaults / specify custom beam splitter / specify ROI Grid.','',...
                                 ['{\bfCamWizard} \color{red}Mandatory to proceed',char(10),'\color{black}Guides user through complete setup.',...
                                 ' After wizard completion the camera background correction / exposure / blacklevel MUST NOT be modified, otherwise you will be forced to re-run the wizard.',...
                                 ' Hotpixeldetection and ROI Selection are required only on first run. If needed, refine the ROI using ROISelector separately',char(10),...
@@ -347,7 +348,7 @@ classdef guiMain < handle
             % c) wavelength changed, since it affects zpos same applies
             % d) pixelpitch is static, so no need
             if obj.imstackReady && obj.resultsReady
-                if ~isequal(obj.imstack.workingFolder,obj.workingFolder) || ~isequal(obj.imstack.wavelength,obj.etalonSpec.laserWavelength)
+                if ~isequal(obj.imstack.workingFolder,obj.workingFolder) || ~isequal(obj.imstack.wavelength,obj.etalonSpec.laserWavelength) || ~isequal(obj.imstack.zPos,obj.gige.OPDroiSorted)
                     obj.askUserExportResultsBeforeReinitialize();
                 else
                     % nothing changed, don't do anything
@@ -370,7 +371,7 @@ classdef guiMain < handle
         
         function askUserExportResultsBeforeReinitialize(obj)
             export = false;
-            answer = questdlg(['\fontsize{12}The output {\bfdirectory} and/or {\bfwavelength} has changed. Internal data structures must be reinitialized, unsaved progress will be lost!',...
+            answer = questdlg(['\fontsize{12}The output {\bfdirectory} and/or {\bfwavelength} and/or {\bfbeam splitter configuration} has changed. Internal data structures must be reinitialized, unsaved progress will be lost!',...
                 ' Do you wish to export existing unsaved results to the previous directory first?'],...
                 'guiMain.askUser','Export and continue','Continue',...
                 struct('Interpreter','tex','Default','Continue'));
@@ -470,9 +471,14 @@ classdef guiMain < handle
                     'fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
                 return
             end
-            userSpec = fokpokgui.etalonSpecSelector(obj.wavelength);
+            if ~obj.etalonsReady
+                userSpec = fokpokgui.etalonSpecSelector(obj.wavelength);
+            else
+                userSpec = fokpokgui.etalonSpecSelector(obj.etalonSpec);
+            end
             if userSpec.success
                 obj.etalonSpec = userSpec.etalonSpec;
+                obj.updateStateOfGui();
             end
         end
         
@@ -545,7 +551,7 @@ classdef guiMain < handle
                         string{1} = '\fontsize{11}Camera is not connected.';
                     end
                     if ~obj.etalonsReady
-                        string{2} = '\fontsize{11}Wavelength is not set.';
+                        string{2} = '\fontsize{11}Beam splitter configuration is required.';
                     end
                 case 'standalone'
                     % not used atm

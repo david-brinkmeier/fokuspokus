@@ -49,14 +49,12 @@ classdef etalons
             % etalons(1030e-9, 4, 5, true, false, 3e-3, 2e-3, 45)
             
             obj.laserWavelength = wavelength;
-            obj.xnum = ynum;
-            obj.ynum = xnum;
-            
+            obj.xnum = xnum;
+            obj.ynum = ynum;
             obj.flipX = flipX;
             obj.flipY = flipY;
-            
-            obj.dX = dX; % 3mm
-            obj.dY = dY; % 2.1mm measured, 2mm theory?!
+            obj.dX = dX;
+            obj.dY = dY;
             obj.wedgeAngle = deg2rad(wedgeAngle);
             
             
