@@ -413,10 +413,13 @@ classdef guiMain < handle
             switch type
                 case 'wavelength'
                     obj.wavelength = input*1e-9;
+                    if obj.etalonsReady
+                        obj.etalonSpec.laserWavelength = obj.wavelength;
+                    end
                     if obj.imstackReady && obj.resultsReady
                         warndlg({['\fontsize{11}You have modified the wavelength \lambda after a previous analysis.',...
                                  ' This changes the optical path distances, as the refractive index n of the beam splitters is a function of the wavelength \lambda.'],...
-                                 'You must redo beam splitter configuration & ROI Selection in order to update the z-Positions of the caustic and the wavelength used for the fit!'},...
+                                 'Beam splitter configuration has been updated with the new wavelength. You must re-do ROI Selection in order to update the z-Positions of the caustic and the wavelength used for the fit!'},...
                             'fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
                     end
             end
