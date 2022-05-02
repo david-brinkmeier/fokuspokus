@@ -17,12 +17,6 @@ classdef etalons
     % which must point in the same drection.
     % --> camera coordinate system X-axis must coincide with the first beam
     % splitter, i.e. correspond to the "x" spec of this class
-    %
-    %
-    % ToDo: Currently, etalons is passed partially to ROIpreselector via
-    % method ROIselector of class gige. ROIs and OPDs are sorted in method
-    % ROIselector of class gige after user specified ROI positions.
-    % All of this should be moved to class etalons!
     
     properties
         laserWavelength (1,1) double    % laser wavelength in SI units / meter
@@ -47,6 +41,16 @@ classdef etalons
        camSeparationX   (1,1) double    % expected lateral separation of adjacent spots on camera sensor
        camSeparationY   (1,1) double    % expected lateral separation of adjacent spots on camera sensor
        refractiveIndex  (1,1) double    % calculated using sellmeier formula for fused silica
+       
+       xIdxLin          (:,1) double    % unsorted linear indices corresponding to ROI grid, derived from xnum/ynum
+       yIdxLin          (:,1) double    % unsorted linear indices corresponding to ROI grid, derived from xnum/ynum
+       
+       xIdxLookup       (:,1) double    % sorted linear indices corresponding to ROI grid, derived from xnum/ynum & xflip/yflip
+       yIdxLookup       (:,1) double    % sorted linear indices corresponding to ROI grid, derived from xnum/ynum & xflip/yflip
+       
+       OPD              (:,1) double    % optical path length for each beam in the grid, derived from xidxLookup/yidxLookup and OPDx/OPDy
+       OPDsorted        (:,1) double    % optical path lengths sorted AND centered about zero
+       sortIDX          (:,1) double    % translate OPD to OPDsorted; used to sort mask ROIs @ ROIselector!
     end
     
     methods
@@ -72,6 +76,46 @@ classdef etalons
            val = double(obj.ynum); 
         end
         
+        function val = get.xIdxLin(obj)
+            xpts = 0:obj.xnum-1;
+            ypts = 0:obj.ynum-1;
+            [X,Y] = meshgrid(xpts,ypts); %#ok<ASGLU>
+            val = X(:);
+        end
+        
+        function val = get.xIdxLookup(obj)
+            xpts_lookup = 0:obj.xnum-1;
+            ypts_lookup = 0:obj.ynum-1;
+            if obj.flipX
+                xpts_lookup = flip(xpts_lookup);
+            end
+            if obj.flipY
+                ypts_lookup = flip(ypts_lookup);
+            end
+            [Xlookup,Ylookup] = meshgrid(xpts_lookup,ypts_lookup); %#ok<ASGLU>
+            val = Xlookup(:);
+        end
+        
+        function val = get.yIdxLin(obj)
+            xpts = 0:obj.xnum-1;
+            ypts = 0:obj.ynum-1;
+            [X,Y] = meshgrid(xpts,ypts); %#ok<ASGLU>
+            val = Y(:);
+        end
+        
+        function val = get.yIdxLookup(obj)
+            xpts_lookup = 0:obj.xnum-1;
+            ypts_lookup = 0:obj.ynum-1;
+            if obj.flipX
+                xpts_lookup = flip(xpts_lookup);
+            end
+            if obj.flipY
+                ypts_lookup = flip(ypts_lookup);
+            end
+            [Xlookup,Ylookup] = meshgrid(xpts_lookup,ypts_lookup); %#ok<ASGLU>
+            val = Ylookup(:);
+        end
+        
         function val = get.OPDx(obj)
             if ~isempty(obj.refractiveIndex)
                 val = 2*obj.dX*cos(obj.wedgeAngle)/obj.refractiveIndex;
@@ -86,6 +130,19 @@ classdef etalons
             else
                 val = nan;
             end
+        end
+        
+        function val = get.OPD(obj)
+            val = (obj.xIdxLookup*obj.OPDx) + (obj.yIdxLookup*obj.OPDy);
+        end
+        
+        function val = get.OPDsorted(obj)
+            val = sort(obj.OPD);
+            val = val - 0.5*max(val); % center OPDs about zero
+        end
+        
+        function val = get.sortIDX(obj)
+           [~,val] = sort(obj.OPD);
         end
         
         function val = get.camSeparationX(obj)

@@ -23,23 +23,19 @@ end
 if ~abort
     obj.grabFrame(); % makre sure frame is up2date
     if check4SoftwareRenderer()
-        result = fokpokgui.ROIpreselector(obj.IMG,etalonSpec.xnum,etalonSpec.ynum,...
-                                                  etalonSpec.flipX,etalonSpec.flipY);
+        result = fokpokgui.ROIpreselector(obj.IMG,etalonSpec);
     else    
-        result = fokpokgui.ROIpreselector(obj,etalonSpec.xnum,etalonSpec.ynum,...
-                                              etalonSpec.flipX,etalonSpec.flipY);
+        result = fokpokgui.ROIpreselector(obj,etalonSpec);
     end
     
     if result.abort == false
         obj.ROIspec = struct('xnum',etalonSpec.xnum,'ynum',etalonSpec.ynum);
         % linIDX
         obj.ROIs = result.rois;
-        obj.OPDroi = (result.xIdxLookup*etalonSpec.OPDx) + (result.yIdxLookup*etalonSpec.OPDy);
+        obj.OPDroi = etalonSpec.OPD;
         % sorted stuff
-        [OPDroiSorted,sortedIDX] = sort(obj.OPDroi);
-        OPDroiSorted = OPDroiSorted - 0.5*max(OPDroiSorted);
-        obj.OPDroiSorted = OPDroiSorted;
-        obj.ROIsSorted = result.rois(sortedIDX);
+        obj.OPDroiSorted = etalonSpec.OPDsorted;
+        obj.ROIsSorted = result.rois(etalonSpec.sortIDX);
     elseif result.abort == true
         obj.ROIspec = struct('xnum',[],'ynum',[]);
         obj.ROIs = [];

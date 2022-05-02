@@ -51,7 +51,7 @@ classdef ROIpreselector < handle
     end
     
     methods
-        function obj = ROIpreselector(img,xnum,ynum,flipx,flipy)
+        function obj = ROIpreselector(img,etalonSpec)
             % init abort as true and rois as cell of masks
             obj.abort = true;
             obj.collisionTimer = tic;
@@ -59,7 +59,7 @@ classdef ROIpreselector < handle
             obj.frameCount = 0;
             
             % get img spec, init rois as cell of masks
-            obj.numOfPoints = xnum*ynum;
+            obj.numOfPoints = etalonSpec.xnum*etalonSpec.ynum;
             
             if isequal(class(img),'gcam')
                 obj.updateIMG = true;
@@ -76,40 +76,34 @@ classdef ROIpreselector < handle
             obj.rois = cell(obj.numOfPoints,1);
             obj.rois(:) = {mask()};
 
-            % init point grid
-            xpts = 0:xnum-1;
-            ypts = 0:ynum-1;
-            [X,Y] = meshgrid(xpts,ypts);
-            obj.xIdx = X(:);
-            obj.yIdx = Y(:);
-           
-            % generate lookup-table points
-            xpts_lookup = xpts;
-            ypts_lookup = ypts;
-            if flipx == true
-                xpts_lookup = flip(xpts_lookup);
-            end
-            if flipy == true
-                ypts_lookup = flip(ypts_lookup);
-            end
-            [Xlookup,Ylookup] = meshgrid(xpts_lookup,ypts_lookup);
-            obj.xIdxLookup = Xlookup(:);
-            obj.yIdxLookup = Ylookup(:);
+            % point grid / indices
+            xnum = etalonSpec.xnum;
+            ynum = etalonSpec.ynum;
+            obj.xIdx = etalonSpec.xIdxLin;
+            obj.yIdx = etalonSpec.yIdxLin;
+            obj.xIdxLookup = etalonSpec.xIdxLookup;
+            obj.yIdxLookup = etalonSpec.yIdxLookup;
             
             % init data structure required to apply transform matrix
-            obj.points_src = [X(:).'; Y(:).'; ones(1,obj.numOfPoints)];
-            obj.roiSize = min([xmax,ymax])/(2*max([xnum,ynum]));
+            obj.points_src = [etalonSpec.xIdxLin.'; etalonSpec.yIdxLin.'; ones(1,obj.numOfPoints)];
             
             % set starting values for shear / points
-            obj.xScale = xmax/xnum;
-            obj.yScale = ymax/ynum;
+            if isequal(class(img),'gcam')
+                obj.xScale = etalonSpec.camSeparationX/img.pixelSize;
+                obj.yScale = etalonSpec.camSeparationY/img.pixelSize;
+                obj.roiSize = min([obj.xScale,obj.yScale])/2;
+            else
+                obj.xScale = xmax/xnum;
+                obj.yScale = ymax/ynum;
+                obj.roiSize = min([xmax,ymax])/(2*max([xnum,ynum]));
+            end
             obj.xShear = 0;
             obj.yShear = 0;
             obj.xOffset = obj.roiSize/2;
             obj.yOffset = obj.roiSize/2;
             
             % init fig and draw initial rois
-            obj.handles = obj.initfig(obj.img,xnum,ynum);
+            obj.handles = obj.initfig(obj.img,xnum,ynum,obj.xScale,obj.yScale,obj.roiSize);
             obj = drawROIs(obj);
                         
             % arm listeners / callbacks
@@ -395,7 +389,7 @@ classdef ROIpreselector < handle
     
     methods (Static, Access = private)
         
-        function h = initfig(img,xnum,ynum)
+        function h = initfig(img,xnum,ynum,xScale,yScale,roiSize)
             % get img spec, required for slider value ranges
             [ymax,xmax] = size(img,1:2);
             
@@ -448,12 +442,12 @@ classdef ROIpreselector < handle
             uicontrol('Parent', h.panel.controlBox,'Style','text',...
                 'String','xDist','FontSize',12);
             h.sliders.xScale = uicontrol( 'Parent', h.panel.controlBox, 'Style','slider', 'Background', 'w',...
-                'value',xmax/xnum,'min',0,'max',xmax/(xnum-1));
+                'value',xScale,'min',0,'max',xmax/(xnum-1));
             % yScale
             uicontrol('Parent', h.panel.controlBox,'Style','text',...
                 'String','yDist','FontSize',12);
             h.sliders.yScale = uicontrol( 'Parent', h.panel.controlBox, 'Style','slider', 'Background', 'w',...
-                'value',ymax/ynum,'min',0,'max',ymax/(ynum-1));
+                'value',yScale,'min',0,'max',ymax/(ynum-1));
             %xShear
             uicontrol('Parent', h.panel.controlBox,'Style','text',...
                 'String','xShear','FontSize',12);
@@ -478,8 +472,8 @@ classdef ROIpreselector < handle
             uicontrol('Parent', h.panel.controlBox,'Style','text',...
                 'String','roiSize','FontSize',12);
             h.sliders.roiSize = uicontrol( 'Parent', h.panel.controlBox, 'Style','slider', 'Background', 'w',...
-                'value',min([xmax,ymax])/(2*max([xnum,ynum])),...
-                'min',0.25*min([xmax,ymax])/(2*max([xnum,ynum])),...
+                'value',roiSize,...
+                'min',0.25*roiSize,...
                 'max',max([xmax,ymax])/max([xnum,ynum]));
             
             % lower button grid

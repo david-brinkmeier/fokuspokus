@@ -521,7 +521,7 @@ classdef camPreview < handle
             caxis(h.ax,obj.cam.grayLevelLims);
             xlim(h.ax,[sx(1), sx(2)]), ylim(h.ax,[sy(1), sy(2)])
             set(h.ax,'XLimMode','auto','YLimMode','auto')
-            xlabel(h.ax,'mm'), ylabel(h.ax,'mm')
+            xlabel(h.ax,'x [mm]'), ylabel(h.ax,'y [mm]')
             h.axToolbar = axtoolbar(h.ax,'default');
             
             % init text for grayLevel
