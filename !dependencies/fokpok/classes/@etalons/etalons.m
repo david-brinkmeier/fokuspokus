@@ -17,6 +17,12 @@ classdef etalons
     % which must point in the same drection.
     % --> camera coordinate system X-axis must coincide with the first beam
     % splitter, i.e. correspond to the "x" spec of this class
+    %
+    %
+    % ToDo: Currently, etalons is passed partially to ROIpreselector via
+    % method ROIselector of class gige. ROIs and OPDs are sorted in method
+    % ROIselector of class gige after user specified ROI positions.
+    % All of this should be moved to class etalons!
     
     properties
         laserWavelength (1,1) double    % laser wavelength in SI units / meter

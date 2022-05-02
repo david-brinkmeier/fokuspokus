@@ -1,5 +1,5 @@
 classdef iso11146fit
-    % holds settings specific to plots
+    % fits beam caustic hyperbola to measurement data
     
     properties (SetAccess = protected)
         z0              (1,1) double    % waist position in m

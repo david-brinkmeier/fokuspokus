@@ -1,12 +1,5 @@
 classdef camPreview < handle
-    % gui for generation of x * y grid of ROIs
-    % output cell of masks can be used to construct src imagestack for
-    % imstack and be used in beam analysis
-    %
-    % call
-    % obj = ROIpreselector(img,xnum,ynum)
-    % this initializes a grid xnum*ynum ROIs w/ gui based in the provided
-    % snapshot image "img"
+    % gige cam preview / analysis
     
     properties (SetAccess = private, GetAccess = public)
         handles                           struct

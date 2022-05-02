@@ -1,4 +1,6 @@
 classdef resultsxy
+    % manages data for xy-axes and executes hyperbola fit for orthogonal
+    % beam axes
     
     properties (SetAccess = protected)
         x                       (1,1) fitresults.iso11146fit    % x fit
