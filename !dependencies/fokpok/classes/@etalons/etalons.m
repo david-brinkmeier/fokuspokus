@@ -58,6 +58,8 @@ classdef etalons
         function obj = etalons(wavelength,xnum,ynum,flipX,flipY,dX,dY,wedgeAngleX,wedgeAngleY)
             % Defaults highMsquared: [lambda, 4, 5, true, false, 3e-3, 2e-3, 45deg, 45deg];
             % etalons(1030e-9, 4, 5, true, false, 3e-3, 2e-3, 45, 45)
+			% Defaults lowMsquared
+			% etalons(1030e-9, 6, 6, true, false, 3.05e-3, 6.45e-3, 11.367, 7.68)
             
             obj.laserWavelength = wavelength;
             obj.xnum = xnum;

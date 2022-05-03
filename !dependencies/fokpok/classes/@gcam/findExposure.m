@@ -79,7 +79,7 @@ while ~done && ~abort
     end
     
     % if blacklevel and exposure is in range then we're done
-    if success_exposure == true
+    if success_exposure
         obj.wait4update(2)
         if obj.isInRange(obj.cam.Average_Value,[240,400])
             done = true;

@@ -233,15 +233,14 @@ classdef etalonSpecSelector < handle
         function loadDefaults(obj,type)
             switch type
                 case 'msquaredLo'
-                    % waiting for info
-                    obj.xnum = 10;
-                    obj.ynum = 12;
+                    obj.xnum = 6;
+                    obj.ynum = 6;
                     obj.flipX = true;
                     obj.flipY = false;
-                    obj.dX = 6.45e-3;
-                    obj.dY = 3.05e-3;
-                    obj.wedgeAngleX = 7.68;
-                    obj.wedgeAngleY = 11.367;
+                    obj.dX = 3.05e-3;
+                    obj.dY = 6.45e-3;
+                    obj.wedgeAngleX = 11.367;
+                    obj.wedgeAngleY = 7.68;
                 case 'msquaredHi'
                     obj.xnum = 4;
                     obj.ynum = 5;
