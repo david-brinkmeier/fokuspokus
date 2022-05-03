@@ -14,8 +14,9 @@ classdef etalonSpecSelector < handle
         flipY                       (1,1) logical
         dX                          (1,1) double % m
         dY                          (1,1) double % m
-        wedgeAngle                  (1,1) double % in deg
-        
+        wedgeAngleX                 (1,1) double % in deg
+        wedgeAngleY                 (1,1) double % in deg
+
         success                     (1,1) logical = false
     end
     
@@ -31,16 +32,24 @@ classdef etalonSpecSelector < handle
         
         function val = get.specIsValid(obj)
             val = true;
-            if any(isnan([double(obj.xnum),double(obj.ynum),obj.dX,obj.dY,obj.wedgeAngle]))
+            if any(isnan([double(obj.xnum),double(obj.ynum),obj.dX,obj.dY,obj.wedgeAngleX,obj.wedgeAngleY]))
                 val = false;
             end
         end
         
-        function val = get.wedgeAngle(obj)
-            if obj.wedgeAngle <= 0 || obj.wedgeAngle >= 90 || isnan(obj.wedgeAngle)
+        function val = get.wedgeAngleX(obj)
+            if obj.wedgeAngleX <= 0 || obj.wedgeAngleX >= 90 || isnan(obj.wedgeAngleX)
                 val = nan;
             else
-                val = obj.wedgeAngle;
+                val = obj.wedgeAngleX;
+            end
+        end
+        
+        function val = get.wedgeAngleY(obj)
+            if obj.wedgeAngleY <= 0 || obj.wedgeAngleY >= 90 || isnan(obj.wedgeAngleY)
+                val = nan;
+            else
+                val = obj.wedgeAngleY;
             end
         end
         
@@ -109,7 +118,8 @@ classdef etalonSpecSelector < handle
             set(obj.h.edit.ynum,'Callback',{@obj.guiSetEditBox,'ynum'})
             set(obj.h.edit.dX,'Callback',{@obj.guiSetEditBox,'dX'})
             set(obj.h.edit.dY,'Callback',{@obj.guiSetEditBox,'dY'})
-            set(obj.h.edit.wedgeAngle,'Callback',{@obj.guiSetEditBox,'wedgeAngle'})
+            set(obj.h.edit.wedgeAngleX,'Callback',{@obj.guiSetEditBox,'wedgeAngleX'})
+            set(obj.h.edit.wedgeAngleY,'Callback',{@obj.guiSetEditBox,'wedgeAngleY'})
             
             % close request
             set(obj.h.fig,'CloseRequestFcn',@(hobj,event) obj.closeGui);
@@ -127,7 +137,7 @@ classdef etalonSpecSelector < handle
         
         function save(obj)
             if obj.specIsValid
-                obj.etalonSpec = etalons(obj.wavelength,obj.xnum,obj.ynum,obj.flipX,obj.flipY,obj.dX,obj.dY,obj.wedgeAngle);
+                obj.etalonSpec = etalons(obj.wavelength,obj.xnum,obj.ynum,obj.flipX,obj.flipY,obj.dX,obj.dY,obj.wedgeAngleX,obj.wedgeAngleY);
                 obj.success = true;
                 obj.closeGui();
             else
@@ -179,7 +189,8 @@ classdef etalonSpecSelector < handle
             obj.flipY = etalonSpec.flipY;
             obj.dX = etalonSpec.dX;
             obj.dY = etalonSpec.dY;
-            obj.wedgeAngle = rad2deg(etalonSpec.wedgeAngle);
+            obj.wedgeAngleX = rad2deg(etalonSpec.wedgeAngleX);
+            obj.wedgeAngleY = rad2deg(etalonSpec.wedgeAngleY);
         end
         
         function guiSetEditBox(obj,hobj,event,type)
@@ -199,8 +210,10 @@ classdef etalonSpecSelector < handle
                     obj.dX = abs(input)*1e-3;
                 case 'dY'
                     obj.dY = abs(input)*1e-3;
-                case 'wedgeAngle'
-                    obj.wedgeAngle = abs(input);
+                case 'wedgeAngleX'
+                    obj.wedgeAngleX = abs(input);
+                case 'wedgeAngleY'
+                    obj.wedgeAngleY = abs(input);
             end
             obj.updateStateOfGui();
         end
@@ -221,13 +234,14 @@ classdef etalonSpecSelector < handle
             switch type
                 case 'msquaredLo'
                     % waiting for info
-                    obj.xnum = 0;
-                    obj.ynum = 0;
-                    obj.flipX = false;
+                    obj.xnum = 10;
+                    obj.ynum = 12;
+                    obj.flipX = true;
                     obj.flipY = false;
-                    obj.dX = 0;
-                    obj.dY = 0;
-                    obj.wedgeAngle = 0;
+                    obj.dX = 6.45e-3;
+                    obj.dY = 3.05e-3;
+                    obj.wedgeAngleX = 7.68;
+                    obj.wedgeAngleY = 11.367;
                 case 'msquaredHi'
                     obj.xnum = 4;
                     obj.ynum = 5;
@@ -235,7 +249,8 @@ classdef etalonSpecSelector < handle
                     obj.flipY = false;
                     obj.dX = 3e-3;
                     obj.dY = 2e-3; % 2.1mm measured, 2mm theory?!
-                    obj.wedgeAngle = 45;
+                    obj.wedgeAngleX = 45;
+                    obj.wedgeAngleY = 45;
             end
             obj.updateStateOfGui();
         end

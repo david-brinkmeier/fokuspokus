@@ -7,7 +7,8 @@ obj.h.chkBox.flipY.Value = obj.flipY;
 obj.h.txt.wavelength.String = obj.wavelength*1e9;
 
 % edit boxes
-obj.h.edit.wedgeAngle.String = obj.wedgeAngle;
+obj.h.edit.wedgeAngleX.String = obj.wedgeAngleX;
+obj.h.edit.wedgeAngleY.String = obj.wedgeAngleY;
 obj.h.edit.dX.String = obj.dX*1e3;
 obj.h.edit.dY.String = obj.dY*1e3;
 obj.h.edit.xnum.String = obj.xnum;

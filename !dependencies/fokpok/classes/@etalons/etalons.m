@@ -32,7 +32,8 @@ classdef etalons
         
         dX              (1,1) double    % gap thickness of first/X etalon
         dY              (1,1) double    % gap thickness of second/Y etalon
-        wedgeAngle      (1,1) double    % etalon wedge angle in rad
+        wedgeAngleX     (1,1) double    % etalon wedge angle X in rad
+        wedgeAngleY     (1,1) double    % etalon wedge angle Y in rad
     end
     
     properties (Dependent)
@@ -54,9 +55,9 @@ classdef etalons
     end
     
     methods
-        function obj = etalons(wavelength,xnum,ynum,flipX,flipY,dX,dY,wedgeAngle)
-            % Defaults highMsquared: [lambda, 4, 5, true, false, 3e-3, 2e-3, 45deg];
-            % etalons(1030e-9, 4, 5, true, false, 3e-3, 2e-3, 45)
+        function obj = etalons(wavelength,xnum,ynum,flipX,flipY,dX,dY,wedgeAngleX,wedgeAngleY)
+            % Defaults highMsquared: [lambda, 4, 5, true, false, 3e-3, 2e-3, 45deg, 45deg];
+            % etalons(1030e-9, 4, 5, true, false, 3e-3, 2e-3, 45, 45)
             
             obj.laserWavelength = wavelength;
             obj.xnum = xnum;
@@ -65,7 +66,8 @@ classdef etalons
             obj.flipY = flipY;
             obj.dX = dX;
             obj.dY = dY;
-            obj.wedgeAngle = deg2rad(wedgeAngle);
+            obj.wedgeAngleX = deg2rad(wedgeAngleX);
+            obj.wedgeAngleY = deg2rad(wedgeAngleY);
         end
         
         function val = get.xnum(obj)
@@ -118,7 +120,7 @@ classdef etalons
         
         function val = get.OPDx(obj)
             if ~isempty(obj.refractiveIndex)
-                val = 2*obj.dX*cos(obj.wedgeAngle)/obj.refractiveIndex;
+                val = 2*obj.dX*cos(obj.wedgeAngleX)/obj.refractiveIndex;
             else
                 val = nan;
             end
@@ -126,7 +128,7 @@ classdef etalons
         
         function val = get.OPDy(obj)
             if ~isempty(obj.refractiveIndex)
-                val = 2*obj.dY*cos(obj.wedgeAngle)/obj.refractiveIndex;
+                val = 2*obj.dY*cos(obj.wedgeAngleY)/obj.refractiveIndex;
             else
                 val = nan;
             end
@@ -146,11 +148,11 @@ classdef etalons
         end
         
         function val = get.camSeparationX(obj)
-            val = 2*obj.dX*cos(obj.wedgeAngle);
+            val = 2*obj.dX*sin(obj.wedgeAngleX);
         end
         
         function val = get.camSeparationY(obj)
-            val = 2*obj.dY*cos(obj.wedgeAngle);
+            val = 2*obj.dY*sin(obj.wedgeAngleY);
         end
         
         function val = get.refractiveIndex(obj)

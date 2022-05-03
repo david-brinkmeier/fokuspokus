@@ -17,7 +17,7 @@ h.fig = figure( ...
     'WindowStyle','modal');
 
 figWidth = 240;
-figHeight = 344;
+figHeight = 364;
 h.fig.Position = [get(0,'PointerLocation')-[figWidth/2,figHeight],figWidth,figHeight];
 
 if h.fig.Position(1) < 0
@@ -93,15 +93,25 @@ VboxTmp2 = uix.VBox('Parent',HboxTmp,'Padding',0,'Spacing',0);
 uix.Empty( 'Parent', VboxTmp2); % whitespace left, auto resize this
 h.edit.dY = uicontrol('Parent',VboxTmp2,'Style','edit','FontSize',10);
 VboxTmp2.Heights = [1,20];
-% // wedgeAngle edit box
+% // wedgeAngleX edit box
 HboxTmp = uix.HBox('Parent',specVbox,'Padding',0,'Spacing',0);
 VboxTmp1 = uix.VBox('Parent',HboxTmp,'Padding',0,'Spacing',0);
 uix.Empty( 'Parent', VboxTmp1); % whitespace left, auto resize this
-uicontrol('Parent',VboxTmp1,'Style','text','String','wedge angle [°]:','HorizontalAlignment','left','FontSize',10);
+uicontrol('Parent',VboxTmp1,'Style','text','String','wedge angle X [°]:','HorizontalAlignment','left','FontSize',10);
 VboxTmp1.Heights = [2,20];
 VboxTmp2 = uix.VBox('Parent',HboxTmp,'Padding',0,'Spacing',0);
 uix.Empty( 'Parent', VboxTmp2); % whitespace left, auto resize this
-h.edit.wedgeAngle = uicontrol('Parent',VboxTmp2,'Style','edit','FontSize',10);
+h.edit.wedgeAngleX = uicontrol('Parent',VboxTmp2,'Style','edit','FontSize',10);
+VboxTmp2.Heights = [1,20];
+% // wedgeAngleY edit box
+HboxTmp = uix.HBox('Parent',specVbox,'Padding',0,'Spacing',0);
+VboxTmp1 = uix.VBox('Parent',HboxTmp,'Padding',0,'Spacing',0);
+uix.Empty( 'Parent', VboxTmp1); % whitespace left, auto resize this
+uicontrol('Parent',VboxTmp1,'Style','text','String','wedge angle Y [°]:','HorizontalAlignment','left','FontSize',10);
+VboxTmp1.Heights = [2,20];
+VboxTmp2 = uix.VBox('Parent',HboxTmp,'Padding',0,'Spacing',0);
+uix.Empty( 'Parent', VboxTmp2); % whitespace left, auto resize this
+h.edit.wedgeAngleY = uicontrol('Parent',VboxTmp2,'Style','edit','FontSize',10);
 VboxTmp2.Heights = [1,20];
 % // flip X/Y chkbox
 HboxTmp = uix.HBox('Parent',specVbox,'Padding',0,'Spacing',0);
@@ -112,7 +122,7 @@ h.chkBox.flipY = uicontrol('Parent',HboxTmp,'Style','checkbox','String','flip Y'
 h.pb.saveexit = uicontrol('Parent',h.panel.saveexit,'Style','pushbutton','String','Save / Exit','FontSize',10,'FontWeight','normal');
 
 % set heights
-h.mainLayout.Heights = [62,220,62];
+h.mainLayout.Heights = [62,240,62];
 
 obj.h = h;
 end
