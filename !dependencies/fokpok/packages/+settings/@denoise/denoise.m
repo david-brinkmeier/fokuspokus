@@ -24,7 +24,7 @@ classdef denoise < handle
     methods
         % constructor and/or resetter
         function obj = denoise()
-            obj.freqfilt = 1;
+            obj.freqfilt = 0;
             obj.removeplane = 1;
             obj.ndev = 1;
             obj.median = 1;

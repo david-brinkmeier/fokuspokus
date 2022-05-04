@@ -233,8 +233,8 @@ classdef etalonSpecSelector < handle
         function loadDefaults(obj,type)
             switch type
                 case 'msquaredLo'
-                    obj.xnum = 6;
-                    obj.ynum = 6;
+                    obj.xnum = 5;
+                    obj.ynum = 5;
                     obj.flipX = true;
                     obj.flipY = false;
                     obj.dX = 3.05e-3;

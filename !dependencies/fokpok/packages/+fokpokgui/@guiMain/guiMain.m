@@ -397,6 +397,7 @@ classdef guiMain < handle
                 obj.imstack.currentIMG = out.images_export;
                 obj.imstack.figs.plotAll(true);
                 obj.imstack.settings.ROI.updateEveryNframes = 1;
+                obj.imstack.settings.denoise.freqfilt = 1;
                 obj.results = imgstack.aioResults(obj.imstack);
             end
             updateStateOfGui(obj);
@@ -502,7 +503,16 @@ classdef guiMain < handle
         
         function roiSelector(obj)
             if ~isempty(obj.gige) && obj.gige.isconnected && obj.etalonsReady
-                obj.gige.ROIselector(obj.etalonSpec);
+                abort = obj.gige.ROIselector(obj.etalonSpec);
+                
+                % if image correction is enabled then user had already completet cam wizard
+                % data in the new ROIs might be over/underexposed, prompt warning / todos for user
+                currentExposureResult = obj.gige.calcExposureResult;
+                if ~abort && obj.gige.BGcorrectionEnabled && ((currentExposureResult > 0.9*obj.gige.grayLevelLims(2)) || (currentExposureResult < 0.5*obj.gige.grayLevelLims(2)))
+                    warndlg({'\fontsize{11}You have modified an existing ROI grid configuration while camera Background/Hotpixel detection is active.','',...
+                        'The image/beam profiles inside the new ROIs are (or are close to) being overexposed or underexposed.','','\color{red}You must re-run the Cam Wizard in order to find the correct exposure/blacklevel and re-do the Background/Hotpixel correction!'},...
+                        'fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
+                end
             else
                 warndlg(obj.getErrorString('cam'),'fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
             end
