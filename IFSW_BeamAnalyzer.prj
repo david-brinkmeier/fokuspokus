@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="1444973733" file="C:\Users\ladmin\Desktop\fokuspokus\IFSW_BeamAnalyzer.prj" location="C:\Users\ladmin\Desktop\fokuspokus" name="IFSW_BeamAnalyzer" preferred-package-location="C:\Users\ladmin\Desktop\fokuspokus\IFSW_BeamAnalyzer\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="1444973733" file="C:\Users\davidbrinkmeier\Desktop\fokpok\IFSW_BeamAnalyzer.prj" location="C:\Users\davidbrinkmeier\Desktop\fokpok" name="IFSW_BeamAnalyzer" preferred-package-location="C:\Users\davidbrinkmeier\Desktop\fokpok\IFSW_BeamAnalyzer\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>IFSW_BeamAnalyzer</param.appname>
     <param.icon>${PROJECT_ROOT}\IFSW_BeamAnalyzer_resources\icon.ico</param.icon>
     <param.icons>
@@ -12,13 +12,13 @@
     <param.authnamewatermark>David Brinkmeier</param.authnamewatermark>
     <param.email>david.brinkmeier@ifsw.uni-stuttgart.de</param.email>
     <param.company>IFSW</param.company>
-    <param.summary>ISO 11146 analysis for laser beam profiles</param.summary>
+    <param.summary>ISO11146 Laser Beam Profiler</param.summary>
     <param.description />
     <param.screenshot>${PROJECT_ROOT}\splash.png</param.screenshot>
     <param.guid />
     <param.installpath.string>\IFSW_BeamAnalyzer\</param.installpath.string>
     <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
-    <param.logo />
+    <param.logo>${PROJECT_ROOT}\hires_smol.png</param.logo>
     <param.install.notes />
     <param.target.install.notes />
     <param.intermediate>${PROJECT_ROOT}\IFSW_BeamAnalyzer\for_testing</param.intermediate>
@@ -28,9 +28,7 @@
     <param.enable.clean.build>false</param.enable.clean.build>
     <param.user.defined.mcr.options />
     <param.target.type>subtarget.standalone</param.target.type>
-    <param.support.packages>
-      <item>&lt;package displayname="GigE Vision Hardware" enabled="false" name="GigE Vision Hardware" product="Image Acquisition Toolbox"/&gt;</item>
-    </param.support.packages>
+    <param.support.packages />
     <param.web.mcr>true</param.web.mcr>
     <param.package.mcr>false</param.package.mcr>
     <param.no.mcr>false</param.no.mcr>
@@ -54,7 +52,6 @@
       <param.description />
       <param.guid />
       <param.installpath.combo />
-      <param.logo />
       <param.install.notes />
       <param.target.install.notes />
       <param.intermediate />
@@ -64,6 +61,7 @@
       <param.enable.clean.build />
       <param.user.defined.mcr.options />
       <param.target.type />
+      <param.support.packages />
       <param.web.mcr />
       <param.package.mcr />
       <param.no.mcr />
@@ -77,24 +75,17 @@
       <param.example />
     </unset>
     <fileset.main>
-      <file>${PROJECT_ROOT}\startFokPok.m</file>
+      <file>${PROJECT_ROOT}\startGUI.m</file>
     </fileset.main>
     <fileset.resources>
       <file>${PROJECT_ROOT}\!dependencies</file>
     </fileset.resources>
     <fileset.package />
-    <fileset.depfun>
-      <file>C:\ProgramData\MATLAB\SupportPackages\R2021a\toolbox\imaq\supportpackages\gige\+imaq\+supportpackages\+gige\+internal\CategoryController.p</file>
-      <file>C:\ProgramData\MATLAB\SupportPackages\R2021a\toolbox\imaq\supportpackages\gige\+imaq\+supportpackages\+gige\+internal\GigeCamController.p</file>
-      <file>C:\ProgramData\MATLAB\SupportPackages\R2021a\toolbox\imaq\supportpackages\gige\+imaq\+supportpackages\+gige\+internal\GigeVisibility.p</file>
-      <file>C:\ProgramData\MATLAB\SupportPackages\R2021a\toolbox\imaq\supportpackages\gige\+imaq\+supportpackages\+gige\+internal\PreviewController.p</file>
-      <file>C:\ProgramData\MATLAB\SupportPackages\R2021a\toolbox\imaq\supportpackages\gige\+imaq\+supportpackages\+gige\+internal\Utility.p</file>
-      <file>C:\ProgramData\MATLAB\SupportPackages\R2021a\toolbox\imaq\supportpackages\gige\@gigecam\gigecam.m</file>
-    </fileset.depfun>
+    <fileset.depfun />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}\IFSW_BeamAnalyzer\for_testing" name="readme.txt" optional="true">C:\Users\ladmin\Desktop\fokuspokus\IFSW_BeamAnalyzer\for_testing\readme.txt</file>
-      <file location="${PROJECT_ROOT}\IFSW_BeamAnalyzer\for_testing" name="IFSW_BeamAnalyzer.exe" optional="false">C:\Users\ladmin\Desktop\fokuspokus\IFSW_BeamAnalyzer\for_testing\IFSW_BeamAnalyzer.exe</file>
-      <file location="${PROJECT_ROOT}\IFSW_BeamAnalyzer\for_testing" name="splash.png" optional="false">C:\Users\ladmin\Desktop\fokuspokus\IFSW_BeamAnalyzer\for_testing\splash.png</file>
+      <file location="${PROJECT_ROOT}\IFSW_BeamAnalyzer\for_testing" name="IFSW_BeamAnalyzer.exe" optional="false">C:\Users\davidbrinkmeier\Desktop\fokpok\IFSW_BeamAnalyzer\for_testing\IFSW_BeamAnalyzer.exe</file>
+      <file location="${PROJECT_ROOT}\IFSW_BeamAnalyzer\for_testing" name="splash.png" optional="false">C:\Users\davidbrinkmeier\Desktop\fokpok\IFSW_BeamAnalyzer\for_testing\splash.png</file>
+      <file location="${PROJECT_ROOT}\IFSW_BeamAnalyzer\for_testing" name="readme.txt" optional="true">C:\Users\davidbrinkmeier\Desktop\fokpok\IFSW_BeamAnalyzer\for_testing\readme.txt</file>
     </build-deliverables>
     <workflow />
     <matlab>
