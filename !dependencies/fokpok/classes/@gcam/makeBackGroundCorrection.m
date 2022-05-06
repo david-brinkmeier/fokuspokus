@@ -16,18 +16,11 @@ if ~abort
     obj.cliBox.killDelay = 1.5;
     obj.cliBox.title = 'Hotpixel Offset Correction';
     obj.cliBox.addText('Starting Hotpixel Offset Correction...\n')
-    
-    if ~obj.isInRange(obj.cam.Average_Value,[240,400])
-        % warn blacklevel is not in range
-        obj.cliBox.type = 'warn';
-        obj.cliBox.addText('BlackLevel is not within acceptable range. Re-run AutoExposure!\n')
-        abort = true;
-    end
-    
+       
     if strcmpi(obj.cam.Correction_Mode,'OffsetHotpixel')
         obj.cliBox.type = 'warn';
         obj.cliBox.addText('OffsetHotpixel Correction is already on!\n')
-        obj.cliBox.addText('If you wish to reset HotpixelCorrection simply re-run AutoExposure!')
+        obj.cliBox.addText('If you wish to reset HotpixelCorrection simply re-run AutoExposure or manually modify exposure / blacklevel (this resets Correction Mode).')
         abort = true;
     end
 end
@@ -45,14 +38,14 @@ function executeBackGroundCorrection(obj)
 % set currrent temperature as reference temperature
 obj.referenceTemp = obj.camTemperature;
 % calibrate blacklevel
-executeCommand(obj.cam, 'Correction_CalibrateBlack')
+executeCommand(obj.cam,'Correction_CalibrateBlack')
 
 pause(0.1)
 while obj.cam.Correction_Busy
    obj.cliBox.addText('.')
    pause(0.1)
 end
-pause(0.1)
+pause(1)
 
 % important: now is the time to update the reference temperature
 obj.referenceTemp = obj.camTemperature;

@@ -31,6 +31,7 @@ classdef gcam < handle
         exposureRange       (1,2) double
         blackLevelRange     (1,2) double
         referenceTemp       (1,1) double    % set upon executing obj.resetCounter
+        currentGrayLevel    (1,1) double    % last normalizedExposure result polled by timer, if == 1 then overexposed
         
         OPDroi              (1,:) double    % optical path differences corresponding to linear index of ROIs
         OPDroiSorted        (1,:) double    % optical path differences corresponding to linear index of ROIsSorted
@@ -47,6 +48,7 @@ classdef gcam < handle
         camIP                (1,:) char
         isconnected          (1,1) logical
         grayLevelLims        (1,2) double
+        normalizedExposure   (1,1) double   % effective maximum detected gray level divided by maximum gray level. equal to 1 = overexposed
         
         IMG                  (:,:,1) double % just a pointer to obj.currentIMGsource
         IMGbinned            (:,:,1) double % takes currentIMGsource and applies binning
@@ -76,6 +78,7 @@ classdef gcam < handle
        absoluteTimer                     % for cam temp change, set upon cam connect
        
        tempDriftWarning           matlab.ui.Figure % handle to warning, used to check to avoid multiple calls
+       overExposedWarning         matlab.ui.Figure % handle to warning, used to check to avoid multiple calls
     end
     
     properties (Access = private)
@@ -154,6 +157,12 @@ classdef gcam < handle
         function set.currentIMGsource(obj,val)
             % used by method grabFrame(obj)
            obj.currentIMGsource = val; 
+        end
+        
+        function val = get.normalizedExposure(obj)
+            if obj.isconnected
+               val = obj.calcExposureResult/obj.grayLevelLims(2);
+            end
         end
         
         function val = get.BGcorrectionEnabled(obj)
@@ -314,7 +323,7 @@ classdef gcam < handle
             abort = false;
             if obj.isconnected
                 if ~strcmpi(obj.cam.Correction_Mode,'off') && obj.warnings_enabled
-                    answer = questdlg('\fontsize{12}Modifying BlackLevel disables OffsetHotpixelCorrection!',...
+                    answer = questdlg('\fontsize{11}Modifying BlackLevel disables OffsetHotpixelCorrection!',...
                         'BlackLevel-Hotpixel','OK fine, continue.','Abort',...
                         struct('Interpreter','tex','Default','Abort'));
                     switch answer
@@ -342,7 +351,7 @@ classdef gcam < handle
                 abort = false;
                 % if OffsetHotpixelCorrection ask User if we should abort
                 if ~strcmpi(obj.cam.Correction_Mode,'off') && obj.warnings_enabled
-                    answer = questdlg('\fontsize{12}Modifying exposure disables OffsetHotpixelCorrection!',...
+                    answer = questdlg('\fontsize{11}Modifying exposure disables OffsetHotpixelCorrection!',...
                         'Exposure-Hotpixel','OK fine, continue.','Abort',...
                         struct('Interpreter','tex','Default','Abort'));
                     switch answer
@@ -605,17 +614,32 @@ classdef gcam < handle
         goalAchieved = PI_control(obj,variant,allowed_deviation,Kp,Ki,debug)
         
         function updateTimerVals(obj)
+            % corresponding timer is started by obj.connect()!
             % update the temperature -> write to internal variable
             obj.camTemperature = obj.cam.DeviceTemperature;
+            % update current normalized gray level (check 4 overexposed)
+            obj.currentGrayLevel = obj.normalizedExposure;
             % update current cam string
             obj.updateCamInfoString()
-            % whenever obj.absoluteTimer executes, these values are force-updated
+            % temperature and overexposure warning
             if ~isnan(obj.referenceTemp)
+                % if a reference temp is set, then camera is setup in
+                % working state for Laser Beam measurement.
+                % verify temp has not drifted and image is not overexposed
                 obj.camTempDrift = abs(obj.camTemperature - obj.referenceTemp);
                 if obj.camTempDrift > 5
-                    if ~isvalid(obj.tempDriftWarning)
-                        obj.tempDriftWarning = warndlg(sprintf('\\fontsize{12}Camera temperature has drifted %.1f °C from reference temperature! Recalibration of BlackLevelOffset advised.',obj.camTempDrift),...
-                                                       'gcam: Temperature Drift',struct('Interpreter','tex','WindowStyle','modal'));
+                    if isempty(obj.tempDriftWarning) || ~isvalid(obj.tempDriftWarning)
+                        obj.tempDriftWarning = warndlg({sprintf('\\fontsize{11}Camera temperature has drifted %.1f °C from reference temperature! Recalibration of BlackLevelOffset advised.\n',obj.camTempDrift),...
+                            'If you close this warning, it will reappear as long as the camera temperature deviates more than 5°C from the reference temperature.','The check is performed every 10 seconds.'},...
+                            'gcam: Temperature Drift',struct('Interpreter','tex','WindowStyle','normal'));
+                    end
+                end
+                
+                % overexposure warning
+                if obj.currentGrayLevel == 1
+                    if isempty(obj.overExposedWarning) || ~isvalid(obj.overExposedWarning)
+                        obj.overExposedWarning = warndlg({'\fontsize{11}The image is currently overexposed,','','If you close this warning, it will reappear as long as the image is overexposed. The check is performed every 10 seconds.'},...
+                            'gcam: Overexposed',struct('Interpreter','tex','WindowStyle','normal'));
                     end
                 end
             end
@@ -686,7 +710,7 @@ classdef gcam < handle
             % force generation of updated cam info string
             % generates camera info string for use in e.g. figure name header
             % some of these calls are surprisingly expensive..dont overdo it
-            strings = cell(1,7);
+            strings = cell(1,8);
             strings{1} = sprintf('%s, ',obj.caminfo.device);
             strings{2} = sprintf('Exposure: %3.2f ms, ',obj.exposure*1e-3);
             strings{3} = sprintf('FPS: %2.1f, ',obj.framerateMAX);
@@ -703,7 +727,8 @@ classdef gcam < handle
             else
                 strings{6} = '';
             end
-            strings{7} = sprintf('Correction: %s.',obj.cam.Correction_Mode);
+            strings{7} = sprintf('Correction: %s, ',obj.cam.Correction_Mode);
+            strings{8} = sprintf('normalized GrayLevel: [%.2f/1].',obj.normalizedExposure);
             % return as char (1,:) array
             obj.camInfoString = [strings{:}];
         end
@@ -746,7 +771,7 @@ classdef gcam < handle
             pkgs = matlabshared.supportpkg.getInstalled;
             pkg_ref = 'Image Acquisition Toolbox Support Package for GigE Vision Hardware';
             if ~license('test','image_toolbox')
-                warndlg('\fontsize{12}Image Processing Toolbox is not installed but required.',...
+                warndlg('\fontsize{11}Image Processing Toolbox is not installed but required.',...
                     'gcam',struct('Interpreter','tex','WindowStyle','modal'))
             end
             if ~isempty(pkgs)
@@ -757,7 +782,7 @@ classdef gcam < handle
                 end
             end
             if ~success && showPrompt
-                warndlg('\fontsize{12}gigecam package for Image Processing Toolbox is not installed but required. Aborting.',...
+                warndlg('\fontsize{11}gigecam package for Image Processing Toolbox is not installed but required. Aborting.',...
                     'gcam',struct('Interpreter','tex','WindowStyle','modal'))
             end
         end

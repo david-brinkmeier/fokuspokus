@@ -76,7 +76,7 @@ classdef camPreview < handle
             
             % arm timer
             obj.timer = timer('TimerFcn',@(hObject,event) obj.updateTimerVals(),...
-                'StartDelay',3,'Period',2,'ExecutionMode','fixedRate','BusyMode','drop');
+                'StartDelay',3,'Period',3,'ExecutionMode','fixedRate','BusyMode','drop');
             start(obj.timer);
             % block program execution until this gui is closed/deleted
             obj.firstCamFrame = uint32(obj.cam.framecount);
@@ -543,7 +543,7 @@ classdef camPreview < handle
             uicontrol('Parent', h.panel.viewVbox,'Style','text',...
                 'String','BlackLevel','FontSize',11);
             h.sliders.BlackLevel = uicontrol( 'Parent', h.panel.viewVbox, 'Style','slider', 'Background', 'w',...
-                'value',mean(obj.cam.blackLevelRange),'min',obj.cam.blackLevelRange(1),'max',obj.cam.blackLevelRange(2));
+                'value',obj.cam.blackLevel,'min',obj.cam.blackLevelRange(1),'max',obj.cam.blackLevelRange(2));
             % CAxis lo/hi slider
             uicontrol('Parent', h.panel.viewVbox,'Style','text',...
                 'String','CAxis Low / High','FontSize',11);

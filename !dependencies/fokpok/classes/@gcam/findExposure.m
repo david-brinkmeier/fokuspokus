@@ -41,9 +41,12 @@ if ~abort
     abort = askUser();
 end
 
+% init
 iteration = 1;
 maxIteration = 15;
 done = false;
+apertureOpen = true;
+
 while ~done && ~abort
     % update title
     obj.cliBox.titlePersistent = 0;
@@ -52,6 +55,10 @@ while ~done && ~abort
     obj.cliBox.titlePersistent = 1;
     
     % verify blackLevel / average value is OK for current exposure
+    if apertureOpen
+        apertureOpen = askUserBlockAperture();
+    end
+    
     if ~obj.isInRange(obj.cam.Average_Value,[240,400])
         obj.cliBox.addText('BlackLevel is not within acceptable range..\n')
         success_blacklevel = obj.PI_control('blacklevel',10,0.025,0,0);
@@ -63,24 +70,34 @@ while ~done && ~abort
         else
             obj.cliBox.newLine();
         end
+    else
+        obj.cliBox.addText('\nBlacklevel is within acceptable parameters.\n')
+        pause(1) % without this delay user tends to think nothing happened IF blacklevel was fine already (instant jump to open aperture request)
     end
     
-    % when avg value in range, try exposure
-    if obj.isInRange(obj.cam.Average_Value,[240,400])
-        success_exposure = obj.PI_control('exposure',15,50,0,0);
-        if ~success_exposure
-            abort = true;
-            obj.cliBox.type = 'warn';
-            obj.cliBox.addText('AutoExposure fail.\n')
-            obj.cliBox.addText('Check Exposure report. Too much or too little signal.')
-        else
-            obj.cliBox.newLine();
-        end
+    % try exposure
+    if ~apertureOpen
+        apertureOpen = askUserOpenAperture();
+    end
+    
+    success_exposure = obj.PI_control('exposure',15,50,0,0);
+    if ~success_exposure
+        abort = true;
+        obj.cliBox.type = 'warn';
+        obj.cliBox.addText('AutoExposure fail.\n')
+        obj.cliBox.addText('Check Exposure report. Too much or too little signal.')
+    else
+        obj.cliBox.newLine();
     end
     
     % if blacklevel and exposure is in range then we're done
     if success_exposure
         obj.wait4update(2)
+        
+        if apertureOpen
+            apertureOpen = askUserBlockAperture();
+        end
+        
         if obj.isInRange(obj.cam.Average_Value,[240,400])
             done = true;
             obj.cliBox.addText('AutoExposure success.\n')
@@ -112,12 +129,39 @@ switch answer
 end
 
 if ~abort
-    answer = questdlg('\fontsize{12}Aperture is open and Laser is on?',...
-        'AutoExposure','Yes, start now!',...
-        struct('Interpreter','tex','Default','Yes, start now!'));
+    str = {'\fontsize{12}The laser must be ON now and you must manually, and in an alternating fashion, OPEN and BLOCK the aperture until convergence is reached.','',...
+           'You will be prompted to OPEN and BLOCK the aperture.'};
+    answer = questdlg(str,...
+        'AutoExposure','OK, start now!',...
+        struct('Interpreter','tex','Default','OK, start now!'));
     switch answer
         case '' % abort [x] click
             abort = true;
     end
 end
 end
+
+function [apertureOpen,abort] = askUserBlockAperture()
+abort = false;
+answer = questdlg('\fontsize{12}The aperture is blocked / closed? [Enter = Yes]',...
+    'AutoExposure: BlackLevel','Yes',...
+    struct('Interpreter','tex','Default','Yes'));
+switch answer
+    case {''}
+        abort = true;
+end
+apertureOpen = false;
+end
+
+function [apertureOpen,abort] = askUserOpenAperture()
+abort = false;
+answer = questdlg('\fontsize{12}The aperture is open? [Enter = Yes]',...
+    'AutoExposure: Exposure','Yes',...
+    struct('Interpreter','tex','Default','Yes'));
+switch answer
+    case {''}
+        abort = true;
+end
+apertureOpen = true;
+end
+

@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
-  <configuration build-checksum="1444973733" file="C:\Users\davidbrinkmeier\Desktop\fokpok\IFSW_BeamAnalyzer.prj" location="C:\Users\davidbrinkmeier\Desktop\fokpok" name="IFSW_BeamAnalyzer" preferred-package-location="C:\Users\davidbrinkmeier\Desktop\fokpok\IFSW_BeamAnalyzer\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
+  <configuration build-checksum="4193271286" file="C:\Users\davidbrinkmeier\Desktop\fokpok\IFSW_BeamAnalyzer.prj" location="C:\Users\davidbrinkmeier\Desktop\fokpok" name="IFSW_BeamAnalyzer" preferred-package-location="C:\Users\davidbrinkmeier\Desktop\fokpok\IFSW_BeamAnalyzer\for_redistribution" preferred-package-type="package.type.exe" target="target.ezdeploy.standalone" target-name="Application Compiler">
     <param.appname>IFSW_BeamAnalyzer</param.appname>
     <param.icon>${PROJECT_ROOT}\IFSW_BeamAnalyzer_resources\icon.ico</param.icon>
     <param.icons>
@@ -14,11 +14,11 @@
     <param.company>IFSW</param.company>
     <param.summary>ISO11146 Laser Beam Profiler</param.summary>
     <param.description />
-    <param.screenshot>${PROJECT_ROOT}\splash.png</param.screenshot>
+    <param.screenshot>${PROJECT_ROOT}\resources\images\splash.png</param.screenshot>
     <param.guid />
     <param.installpath.string>\IFSW_BeamAnalyzer\</param.installpath.string>
     <param.installpath.combo>option.installpath.programfiles</param.installpath.combo>
-    <param.logo>${PROJECT_ROOT}\hires_smol.png</param.logo>
+    <param.logo>${PROJECT_ROOT}\resources\images\caustic.png</param.logo>
     <param.install.notes />
     <param.target.install.notes />
     <param.intermediate>${PROJECT_ROOT}\IFSW_BeamAnalyzer\for_testing</param.intermediate>
