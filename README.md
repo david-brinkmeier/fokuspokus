@@ -29,6 +29,7 @@
 ![](!docs/img/1_main.PNG?raw=true)
 
 - Load and tag your images / specify pixelpitch and wavelength.
+- It is attempted to extract the z-position from the filename. Reproduce the naming scheme of the [test datasets](/TestData) for your data to use this feature.
 
 ![](!docs/img/2_selector.png?raw=true)
 

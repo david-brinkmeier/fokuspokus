@@ -59,7 +59,7 @@ success = true;
 obj.h.table.Data = cell(len,3);
 obj.filename = filename;
 obj.workingFolder = pathname;
-obj.zPos = nan(len,1);
+obj.zPos = parseZpos(filename,obj.spatial_scale); % obj.zPos = nan(len,1);
 obj.useIMG = true(len,1);
 obj.overExposed = overExposed;
 obj.inpaintUndoIMGs = cell(len,1);
@@ -106,4 +106,24 @@ if ~bitget(szx,1)
 end
 % save / update axis
 img = img(1:szy,1:szx,:);
+end
+
+function zPos = parseZpos(filename,scale)
+% attempts to parse z-pos from filename if convertible to valid numeric
+% if valid, then assume filename-value is given in [m,mm,µm] as user
+% provided
+
+len = length(filename);
+zPos = nan(len,1);
+for i = 1:len
+    % extract all numbers, minus sign, dots and commas
+    currentZpos = regexp(filename{i},'[-,0-9,.,,]','match');
+    % replace commas with dots
+    currentZpos = strrep(char(cell2mat(currentZpos)),',','.');
+    % attempt conversion to numeric
+    currentZpos = str2num(currentZpos); %#ok<ST2NM>
+    if isnumeric(currentZpos) && isfinite(currentZpos)
+        zPos(i) = currentZpos/scale;
+    end
+end
 end

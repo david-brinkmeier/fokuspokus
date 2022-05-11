@@ -569,6 +569,7 @@ classdef fileSelector < handle
             obj.idx = 1;
             flag = obj.loadFiles();
             if flag
+                obj.sortData();
                 obj.updateTable();
                 obj.updateImage();
             end
