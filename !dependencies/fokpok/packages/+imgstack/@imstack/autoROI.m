@@ -43,7 +43,9 @@ logmask = mask.radial_logmask(size(img,1:2));
 rmbsettings = struct('fitsamples',250,'fitvariant','eig','removeplane',true,'ndev',2,'debug',false);
 for i = 1:len
     [img(:,:,i),~] = obj.rmbackground(img(:,:,i),logmask,rmbsettings);    
-    img(:,:,i) = medfilt2(img(:,:,i),3*[1 1]);
+    if obj.settings.ImageProcessingToolbox
+        img(:,:,i) = medfilt2(img(:,:,i),3*[1 1]);
+    end
 end
 
 % preallocate rectangular logical mask

@@ -10,6 +10,7 @@ classdef settingscontainer < handle
     end
     
     properties (SetAccess = protected)
+        ImageProcessingToolbox (1,1) logical
     end
     
     properties (Access = private)
@@ -26,6 +27,13 @@ classdef settingscontainer < handle
             obj.moments = settings.moments();
             obj.center = settings.center();
             obj.fit = settings.fit();
+            obj.ImageProcessingToolbox = true;
+            
+            if ~contains(struct2array(ver),'Image Processing Toolbox') && ~isdeployed
+                obj.ImageProcessingToolbox = false;
+                warndlg('\fontsize{11}Image Processing Toolbox is missing. Some features have been disabled. Some debugging features will lead to unexpected errors when enabled.',...
+                        'settings',struct('Interpreter','tex','WindowStyle','modal'));
+            end
         end
     end
     
