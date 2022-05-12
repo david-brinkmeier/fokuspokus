@@ -29,9 +29,9 @@ classdef settingscontainer < handle
             obj.fit = settings.fit();
             obj.ImageProcessingToolbox = true;
             
-            if ~contains(struct2array(ver),'Image Processing Toolbox') && ~isdeployed
+            if ~isdeployed && (~contains(struct2array(ver),'Image Processing Toolbox') || ~license('test','image_toolbox')) % this confirms BOTH license and actual install of toolbox exists
                 obj.ImageProcessingToolbox = false;
-                warndlg('\fontsize{11}Image Processing Toolbox is missing. Some features have been disabled. Some debugging features will lead to unexpected errors when enabled.',...
+                warndlg('\fontsize{11}Image Processing Toolbox is missing or unlicensed. Some features have been disabled. Some debugging features will lead to unexpected errors when enabled.',...
                         'settings',struct('Interpreter','tex','WindowStyle','modal'));
             end
         end
