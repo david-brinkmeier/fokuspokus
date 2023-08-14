@@ -9,6 +9,8 @@ classdef gcam < handle
     end
     
     properties (SetAccess = protected, GetAccess = public)
+        shutter             (1,1) thorlabs_elliptec_ell6k % cam requires shutter control...fokuspokus should encapsulate class cam + shutter in future revision
+        
         cam                                 % gigecam object or empty
         camInfoString       (1,:) char      % header for figname w/ basic user info
         identifier          (1,:) char      % IP Address or Cam Serial number,

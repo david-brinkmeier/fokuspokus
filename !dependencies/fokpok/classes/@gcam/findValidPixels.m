@@ -8,7 +8,8 @@ function abort = findValidPixels(obj)
 % beforehand; turns out gige cam fpga-hotpixelcorrection essentially
 % removes the same pixels we detect here (as it should/must be)
 
-[abort,reset] = askUser();
+[abort,reset] = askUser(obj.shutter);
+% aperture is now closed (user acknowledges or automatic if available)
 
 % init info box
 if ~abort && (reset == false)
@@ -33,6 +34,9 @@ end
 if reset
     obj.validpixels = [];
 end
+
+% attempt to move shutter open if device is available
+obj.shutter.moveShutter('open');
 end
 
 function getValidPixels(obj)
@@ -111,13 +115,17 @@ else
     obj.cliBox.addText('TOO BRIGHT. CLOSE APERTURE!')
 end
 
+% use defaults
+obj.blackLevel = 130;
+obj.exposure = 50000;
+
 % close cli
 obj.cliBox.title = 'Hotpixel Detection';
 obj.cliBox.exitButton = 1;
 obj.cliBox.kill
 end
 
-function [abort,reset] = askUser()
+function [abort,reset] = askUser(shutter)
 abort = false;
 reset = false;
 
@@ -132,6 +140,13 @@ switch answer
         reset = true;
 end
 
+% move shutter if device is available, return upon success
+shutter.moveShutter('closed');
+if shutter.isInPositionClosed
+    return
+end
+
+% otherwise prompt user for manual shuttering
 if ~abort
     answer = questdlg('\fontsize{12}Aperture is completely closed?',...
         'Hotpixel Detection','Yes, start now!',...

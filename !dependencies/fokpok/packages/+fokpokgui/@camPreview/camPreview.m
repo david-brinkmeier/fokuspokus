@@ -43,10 +43,15 @@ classdef camPreview < handle
             end
             lastBinning = gcam.binning_factor;
             
+            % attempt to move shutter open if device is available
+            if ~gcam.shutter.isInPositionOpen
+                gcam.shutter.moveShutterOpen;
+            end
+            
             % init fig and draw initial rois
             obj.cam = gcam;
             obj.handles = obj.initfig();
-            obj.updateSpatialAxes()
+            obj.updateSpatialAxes()            
             
             % arm listeners / callbacks
             % addlistener(obj.handles.sliders.xScale, 'Value', 'PostSet', @(hobj,event) obj.checkSliders('xScale'));

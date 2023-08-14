@@ -52,6 +52,7 @@ classdef ROIpreselector < handle
     
     methods
         function obj = ROIpreselector(img,etalonSpec)
+            % note: "img" may be single numeric img or class gcam
             % init abort as true and rois as cell of masks
             obj.abort = true;
             obj.collisionTimer = tic;
@@ -317,6 +318,7 @@ classdef ROIpreselector < handle
                 gcam.grabFrame()
                 obj.frameCount = obj.frameCount+1;
                 obj.handles.image.CData = gcam.IMG;
+%                 obj.handles.image.CData = log(1+gcam.IMG);
                 obj.handles.panel.view.Title = sprintf('Image (gige), frame: %i',obj.frameCount);
             end
         end

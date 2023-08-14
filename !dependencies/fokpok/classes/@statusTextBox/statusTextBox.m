@@ -30,7 +30,7 @@ classdef statusTextBox < handle
     %
     % EXAMPLE
     %
-    % cliBox = statusTextBox(1,21,12,'normal','info');    init
+    % cliBox = statusTextBox(1,21,12,'normal','info');   % init
     % cliBox.title = 'proper title';
     % cliBox.addText('Line 1');
     % cliBox.addText(' - and this is appended!');

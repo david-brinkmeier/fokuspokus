@@ -1,6 +1,6 @@
 function abort = makeBackGroundCorrection(obj)
 % check with user
-abort = askUser();
+abort = askUser(obj.shutter);
 
 % check cam connection status
 if ~obj.isconnected
@@ -16,7 +16,7 @@ if ~abort
     obj.cliBox.killDelay = 1.5;
     obj.cliBox.title = 'Hotpixel Offset Correction';
     obj.cliBox.addText('Starting Hotpixel Offset Correction...\n')
-       
+    
     if strcmpi(obj.cam.Correction_Mode,'OffsetHotpixel')
         obj.cliBox.type = 'warn';
         obj.cliBox.addText('OffsetHotpixel Correction is already on!\n')
@@ -42,8 +42,8 @@ executeCommand(obj.cam,'Correction_CalibrateBlack')
 
 pause(0.1)
 while obj.cam.Correction_Busy
-   obj.cliBox.addText('.')
-   pause(0.1)
+    obj.cliBox.addText('.')
+    pause(0.1)
 end
 pause(1)
 
@@ -51,7 +51,7 @@ pause(1)
 obj.referenceTemp = obj.camTemperature;
 
 obj.cliBox.newLine();
-obj.cliBox.addText('Success & Done!\n')
+obj.cliBox.addText('Successy & Done!\n')
 obj.cliBox.addText('enabling OffsetHotpixel Correction.')
 obj.cam.Correction_Mode = 'OffsetHotpixel';
 obj.wait4update(2);
@@ -63,7 +63,7 @@ obj.wait4update(2);
 % obj.cam.Correction_Mode = 'OffsetHotpixel';
 end
 
-function abort = askUser()
+function abort = askUser(shutter)
 abort = false;
 
 answer = questdlg('\fontsize{12}Start HotpixelOffset Correction?',...
@@ -77,7 +77,15 @@ switch answer
 end
 
 if ~abort
-    answer = questdlg('\fontsize{12}Aperture is open and Laser is off?',...
+    % attempt to move shutter to open position
+    shutter.moveShutter('open');
+    if shutter.isInPositionOpen
+        str = {'\fontsize{12}Laser is off?'};
+    else
+        str = {'\fontsize{12}Aperture is open and Laser is off?'};
+    end
+    
+    answer = questdlg(str,...
         'HotpixelOffset Correction','Yes, start now!',...
         struct('Interpreter','tex','Default','Yes, start now!'));
     switch answer

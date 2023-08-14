@@ -455,7 +455,8 @@ classdef guiMain < handle
         
         function connectCam(obj)
            if isempty(obj.gige)
-              obj.gige = gcam(); 
+              obj.gige = gcam();
+              obj.gige.shutter.moveShutter('open');
            end
            obj.gige.connect();
            obj.updateStateOfGui()
@@ -537,6 +538,7 @@ classdef guiMain < handle
         
         function disconnectCam(obj)
             if ~isempty(obj.gige)
+                obj.gige.shutter.moveShutter('closed');
                 obj.gige.disconnect();
                 obj.gige = gcam.empty;
             end

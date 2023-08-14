@@ -1,11 +1,11 @@
 function abort = camSetupWizard(obj,etalonSpec)
 % helps user through the complete cam setup
 %
-% 1a) determine Hotpixels
+% 1a) determine Hotpixels (aperture closed)
 % obj.findValidPixels();
 % 1b) determine ROIs 
 % obj.ROIselector();
-% 2) iteratively determine blackLevel / exposure
+% 2) iteratively determine blackLevel / exposure (aperture open / closed iteratively)
 % obj.findExposure();
 % 3) apply HotpixelOffset Correction; Aperture Open + Laser OFF!
 % obj.makeBackGroundCorrection();

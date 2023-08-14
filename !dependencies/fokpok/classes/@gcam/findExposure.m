@@ -38,7 +38,7 @@ if ~abort
 end
 
 if ~abort
-    abort = askUser();
+    [abort,tryShutter] = askUser(obj.shutter);
 end
 
 % init
@@ -56,7 +56,7 @@ while ~done && ~abort
     
     % verify blackLevel / average value is OK for current exposure
     if apertureOpen
-        apertureOpen = askUserBlockAperture();
+        apertureOpen = askUserBlockAperture(obj.shutter, tryShutter);
     end
     
     if ~obj.isInRange(obj.cam.Average_Value,[240,400])
@@ -77,7 +77,7 @@ while ~done && ~abort
     
     % try exposure
     if ~apertureOpen
-        apertureOpen = askUserOpenAperture();
+        apertureOpen = askUserOpenAperture(obj.shutter, tryShutter);
     end
     
     success_exposure = obj.PI_control('exposure',15,50,0,0);
@@ -95,7 +95,7 @@ while ~done && ~abort
         obj.wait4update(2)
         
         if apertureOpen
-            apertureOpen = askUserBlockAperture();
+            apertureOpen = askUserBlockAperture(obj.shutter, tryShutter);
         end
         
         if obj.isInRange(obj.cam.Average_Value,[240,400])
@@ -113,12 +113,17 @@ while ~done && ~abort
     end
 end
 
+% attempt to move shutter open if device is available
+if tryShutter
+    obj.shutter.moveShutter('open');
+end
+
 % close cli
 obj.cliBox.exitButton = 1;
 obj.cliBox.kill
 end
 
-function abort = askUser()
+function [abort,tryShutter] = askUser(shutter)
 abort = false;
 answer = questdlg('\fontsize{12}Start AutoExposure?',...
     'AutoExposure','Yes','No',...
@@ -129,8 +134,17 @@ switch answer
 end
 
 if ~abort
-    str = {'\fontsize{12}The laser must be ON now and you must manually, and in an alternating fashion, OPEN and BLOCK the aperture until convergence is reached.','',...
-           'You will be prompted to OPEN and BLOCK the aperture.'};
+    
+    shutter.connect; % try to establish connection to ThorlabsELL6K  
+    if shutter.isConnected
+        tryShutter = true;
+        str = {'\fontsize{12}The laser must be ON now.','The shutter will OPEN and BLOCK the aperture until convergence is reached.'};
+    else
+        tryShutter = false;
+        str = {'\fontsize{12}The laser must be ON now and you must manually, and in an alternating fashion, OPEN and BLOCK the aperture until convergence is reached.','',...
+            'You will be prompted to OPEN and BLOCK the aperture.'}; 
+    end
+    
     answer = questdlg(str,...
         'AutoExposure','OK, start now!',...
         struct('Interpreter','tex','Default','OK, start now!'));
@@ -139,10 +153,22 @@ if ~abort
             abort = true;
     end
 end
+
 end
 
-function [apertureOpen,abort] = askUserBlockAperture()
+function [apertureOpen,abort] = askUserBlockAperture(shutter, tryShutter)
 abort = false;
+
+% try automatic shutter
+if tryShutter % if we dont use this then each call to moveshutter costs > 1s
+    shutter.moveShutter('closed');
+    if shutter.isInPositionClosed
+        apertureOpen = false;
+        return
+    end
+end
+
+% otherwise manual
 answer = questdlg('\fontsize{12}The aperture is blocked / closed? [Enter = Yes]',...
     'AutoExposure: BlackLevel','Yes',...
     struct('Interpreter','tex','Default','Yes'));
@@ -153,8 +179,19 @@ end
 apertureOpen = false;
 end
 
-function [apertureOpen,abort] = askUserOpenAperture()
+function [apertureOpen,abort] = askUserOpenAperture(shutter, tryShutter)
 abort = false;
+
+% try automatic shutter
+if tryShutter % if we dont use this then each call to moveshutter costs > 1s
+    shutter.moveShutter('open');
+    if shutter.isInPositionOpen
+        apertureOpen = true;
+        return
+    end
+end
+
+% otherwise manual
 answer = questdlg('\fontsize{12}The aperture is open? [Enter = Yes]',...
     'AutoExposure: Exposure','Yes',...
     struct('Interpreter','tex','Default','Yes'));
