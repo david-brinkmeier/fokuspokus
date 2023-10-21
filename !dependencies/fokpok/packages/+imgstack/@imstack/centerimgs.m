@@ -148,7 +148,7 @@ title(handles.ax_a,'source')
 handles.img_b = imagesc(handles.ax_b,data.xaxis,data.yaxis,out_img(:,:,1));
 caxis(handles.ax_b,[0 max(out_img(:,:,1),[],'all')])
 handles.xl_b = xline(handles.ax_b,data.xinterp(xc_out(1)),lspec_a,lwidth{:},'Label',sprintf('%.1f',data.xinterp(xc_out(1))));
-handles.yl_b = yline(handles.ax_b,data.xinterp(yc_out(1)),lspec_a,lwidth{:},'Label',sprintf('%.1f',data.xinterp(yc_out(1))));
+handles.yl_b = yline(handles.ax_b,data.yinterp(yc_out(1)),lspec_a,lwidth{:},'Label',sprintf('%.1f',data.yinterp(yc_out(1))));
 plot(handles.ax_b,data.xaxis([1,end]),data.yaxis([1,end]),lspec_b,lwidth{:})
 plot(handles.ax_b,data.xaxis([1,end]),data.yaxis([end,1]),lspec_b,lwidth{:})
 title(handles.ax_b,'translated')
