@@ -327,11 +327,11 @@ end
 %% Export PNG/FIG
 if ~dontCountOrSave && h.settings.makeExport
     if ~isnan(obj.time)
-        filename = sprintf('%s%i_%s_time%.2fsec_%s',...
-            obj.figs.outputFolder,h.settings.counter,h.settings.name_compact,obj.time,obj.uuid_internal);
+        filename = sprintf('%s%i_%s_time%.2fs_%s',...
+            obj.figs.outputFolder,h.settings.counter,h.settings.name_compact,obj.time,obj.uuid);
     else
         filename = sprintf('%s%i_%s_%s',...
-            obj.figs.outputFolder,h.settings.counter,h.settings.name_compact,obj.uuid_internal);
+            obj.figs.outputFolder,h.settings.counter,h.settings.name_compact,obj.uuid);
     end
     
     if h.settings.exportFig

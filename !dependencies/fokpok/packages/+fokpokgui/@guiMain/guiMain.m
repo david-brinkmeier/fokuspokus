@@ -459,7 +459,7 @@ classdef guiMain < handle
               obj.gige.shutter.moveShutter('open');
            end
            obj.gige.connect();
-           obj.updateStateOfGui()
+           obj.updateStateOfGui();
         end
         
         function camPreview(obj)
@@ -468,7 +468,7 @@ classdef guiMain < handle
            else
                warndlg('\fontsize{11}Camera is not connected.','fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
            end
-           obj.updateStateOfGui()
+           obj.updateStateOfGui();
         end
         
         function initEtalonSpec(obj)
@@ -502,7 +502,7 @@ classdef guiMain < handle
             else
                 warndlg(obj.getErrorString('cam'),'fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
             end
-            obj.updateStateOfGui()
+            obj.updateStateOfGui();
         end
         
         function roiSelector(obj)
@@ -520,7 +520,7 @@ classdef guiMain < handle
             else
                 warndlg(obj.getErrorString('cam'),'fokpokgui.guiMain',struct('Interpreter','tex','WindowStyle','modal'));
             end
-            obj.updateStateOfGui()
+            obj.updateStateOfGui();
         end
         
         function requestFolder(obj)

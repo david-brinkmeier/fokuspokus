@@ -361,7 +361,7 @@ classdef aioResults
         
         function obj = mkNewUUID(obj)
             uuid_tmp = char(java.util.UUID.randomUUID.toString);
-            obj.uuid_internal = uuid_tmp(1:5);
+            obj.uuid_internal = uuid_tmp(1:8);
         end
         
     end
@@ -414,7 +414,7 @@ classdef aioResults
                     case bool
                         fns_varname{i} = [fns{i},32,'[boolean]'];
                     case 'uuid'
-                        fns_varname{i} = [fns{i},32,'[hhmmss.fff]'];
+                        fns_varname{i} = [fns{i},32,'[hhmmss_fff_uuid]'];
                     case 'time'
                         fns_varname{i} = [fns{i},32,'[s]'];
                     otherwise

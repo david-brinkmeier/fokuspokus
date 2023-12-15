@@ -201,7 +201,7 @@ classdef imstack
                     return
                 end
             end
-            obj.uuid = datestr(now,'HHMMSS.FFF');
+            obj.uuid = [datestr(now,'HHMMSS_FFF_'),obj.uuid_internal];
             
             % first run check 4 conflicts
             if obj.counter == 1
@@ -412,7 +412,7 @@ classdef imstack
         
         function uuid = mkNewUUID()
             uuid_tmp = char(java.util.UUID.randomUUID.toString);
-            uuid = uuid_tmp(1:5);
+            uuid = uuid_tmp(1:8);
         end
         
         function disableToolbarButtons(hToolbar)
