@@ -45,7 +45,7 @@ classdef camPreview < handle
             
             % attempt to move shutter open if device is available
             if ~gcam.shutter.isInPositionOpen
-                gcam.shutter.moveShutterOpen;
+                gcam.shutter.moveShutter('open');
             end
             
             % init fig and draw initial rois
