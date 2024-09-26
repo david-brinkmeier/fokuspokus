@@ -90,8 +90,11 @@ vBoxDenoise.Heights = [25,25];
 % Denoise-Background Panel
 denoiseBackground = uix.Panel('Parent',vBoxDenoiseMain,'Title','background','FontSize',10,'Padding',5);
 vBoxDenoise = uix.VBox('Parent', denoiseBackground, 'Padding', 0, 'Spacing', 0);
-% top row: tiltedPLane
-h.chkBox.denoise.removeplane = uicontrol('Parent',vBoxDenoise,'Style','checkbox','String','Assume tilted plane','FontSize',10);
+% top row: remove tilted plane or DC offset
+HBoxdenoise = uix.HBox('Parent', vBoxDenoise, 'Padding', 0, 'Spacing', 5);
+h.chkBox.denoise.removeplane = uicontrol('Parent',HBoxdenoise,'Style','checkbox','String','Remove plane','FontSize',10);
+h.chkBox.denoise.removeDCOffset = uicontrol('Parent',HBoxdenoise,'Style','checkbox','String','Remove DC offset','FontSize',10);
+HBoxdenoise.Widths = [110,130];
 % next row: fitsamples text + editbox [numeric]
 HBoxdenoise = uix.HBox('Parent', vBoxDenoise, 'Padding', 0, 'Spacing', 5);
 VBox_tmp = uix.VBox('Parent', HBoxdenoise, 'Padding', 0, 'Spacing', 0);

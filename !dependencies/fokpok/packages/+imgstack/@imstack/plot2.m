@@ -159,6 +159,17 @@ if initAllGraphics
     h.lines.causticFitY = plot(h.ax,len_mult2*obj.results.z_fit,...
                                     len_mult*0.5*[obj.results.dy_fit; -obj.results.dy_fit],'-b');
 else
+    % new condition: z positions can change if a measurement plane is
+    % omitted for the fit bc of SNR concerns or something
+    h.lines.causticMeasX(1).XData = len_mult2*obj.results.z;
+    h.lines.causticMeasX(2).XData = len_mult2*obj.results.z;
+    h.lines.causticMeasY(1).XData = len_mult2*obj.results.z;
+    h.lines.causticMeasY(2).XData = len_mult2*obj.results.z;
+    h.lines.causticFitX(1).XData = len_mult2*obj.results.z_fit;
+    h.lines.causticFitX(2).XData = len_mult2*obj.results.z_fit;
+    h.lines.causticFitY(1).XData = len_mult2*obj.results.z_fit;
+    h.lines.causticFitY(2).XData = len_mult2*obj.results.z_fit;
+    
     h.lines.causticMeasX(1).YData = len_mult*0.5*obj.results.dx;
     h.lines.causticMeasX(2).YData = -len_mult*0.5*obj.results.dx;
     h.lines.causticMeasY(1).YData = len_mult*0.5*obj.results.dy;

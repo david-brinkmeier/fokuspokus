@@ -4,7 +4,7 @@ classdef guiMain < handle
         h                                 struct
     end
     
-    properties (SetAccess = protected, GetAccess = public)
+    properties (SetAccess = public, GetAccess = public)
         wavelength                  (1,1) double
         imstack                           imgstack.imstack
         results                           imgstack.aioResults

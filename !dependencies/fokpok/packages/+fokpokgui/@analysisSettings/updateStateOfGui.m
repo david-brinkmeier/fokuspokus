@@ -13,6 +13,7 @@ else
 end
 
 obj.h.chkBox.denoise.freqfilt.Value = obj.settings.denoise.freqfilt;
+obj.h.chkBox.denoise.removeDCOffset.Value = obj.settings.denoise.removeDCoffset;
 obj.h.chkBox.denoise.removeplane.Value = obj.settings.denoise.removeplane;
 obj.h.chkBox.roi.guiROI.Value = obj.settings.ROI.guiROI;
 obj.h.chkBox.roi.autoROI.Value = obj.settings.ROI.autoROI;

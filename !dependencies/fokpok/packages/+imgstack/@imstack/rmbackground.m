@@ -105,7 +105,7 @@ if settings.removeplane == true
     stddev = std(z-lsqplane(idx)); % note: z is already z(idx), cf. line 68
     % subtract plane from image and subtract n standard devs
     processed_img = img - lsqplane - settings.ndev*stddev;
-else
+elseif settings.removeDCoffset == true
     % get a known point on the plane, e.g. center of the points in the mask
     center = mean([x,y,z],1);
     % assume constant DC offset based on mask values / "constant level plane" in z direction
@@ -114,6 +114,8 @@ else
     lsqplane = mean(z); % then the plane is just a constant value everywhere...
     stddev = std(z-mean(z));
     processed_img = img - lsqplane - settings.ndev*stddev;
+else
+    processed_img = img;
 end
 
 % enforce positivity constraint, negative energy not allowed bc not physical
