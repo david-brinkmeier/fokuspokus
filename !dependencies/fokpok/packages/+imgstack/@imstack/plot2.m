@@ -244,7 +244,9 @@ if initAllGraphics
                         len_mult*[patchYzr_ydata, fliplr(-patchYzr_ydata)],...
                         'b', 'FaceAlpha', 0.15, 'EdgeAlpha', 0);
 else
+    h.patch.X.XData = len_mult2*[obj.results.z_fit, fliplr(obj.results.z_fit)];
     h.patch.X.YData = len_mult*0.5*[obj.results.dx_fit, fliplr(-obj.results.dx_fit)];
+    h.patch.Y.XData = len_mult2*[obj.results.z_fit, fliplr(obj.results.z_fit)];
     h.patch.Y.YData = len_mult*0.5*[obj.results.dy_fit, fliplr(-obj.results.dy_fit)];
     h.patch.Xzr.XData = len_mult2*[patchXzr_xdata, fliplr(patchXzr_xdata)];
     h.patch.Xzr.YData = len_mult*[patchXzr_ydata, fliplr(-patchXzr_ydata)];

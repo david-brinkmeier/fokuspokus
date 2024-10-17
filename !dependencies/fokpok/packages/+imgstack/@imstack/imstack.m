@@ -7,6 +7,7 @@ classdef imstack
         settings        (1,1)   settings.settingscontainer
         figs            (1,1)   plots.plotcontainer
         dontCountOrSave (1,1)   logical % force disables counting / saving figs
+        logmask         (:,1)   logical % an optional vector can be provided to select which frames within the stack should be used to analysis
     end
     
     properties (SetAccess = protected)
@@ -80,6 +81,13 @@ classdef imstack
         
         function val = get.zPos(obj)
             val = obj.axis.src.z;
+            if ~isempty(obj.logmask)
+                if length(obj.axis.src.z) == length(obj.logmask)
+                    val = obj.axis.src.z(obj.logmask);
+                else
+                    warning('Logmask is provided, but the length does not match the slices in the image stack. Ignoring.')
+                end
+            end
         end
         
         function obj = set.zPos(obj,input)
@@ -143,8 +151,11 @@ classdef imstack
             end
         end
         
-        function currentIMG = get.currentIMG(obj)
-            currentIMG = obj.img.src; % only handle to img.src
+        function val = get.currentIMG(obj)
+            val = obj.img.src; % only handle to img.src
+            if ~isempty(obj.logmask) && (length(obj.axis.src.z) == length(obj.logmask))
+                val = obj.img.src(:,:,obj.logmask);    
+            end
         end
         
         function obj = set.denoisedIMG(obj,img)

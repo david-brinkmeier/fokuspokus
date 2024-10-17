@@ -81,7 +81,7 @@ classdef aioResults
             % wavelength,pixelpitch,zPos,workingFolder
             obj.wavelength = imstack.wavelength;
             obj.pixelpitch = imstack.pixelpitch;
-            obj.zPos = imstack.zPos;
+            obj.zPos = imstack.axis.src.z;
             obj.workingFolder = imstack.figs.workingFolder;
             obj = obj.mkNewUUID();
             
@@ -164,9 +164,16 @@ classdef aioResults
             end
             
             % data (Table2), only available in output struct file
-            obj.theta(obj.idx,:) = imstack.results.theta_internal;
-            obj.dx(obj.idx,:) = imstack.results.dx_internal;
-            obj.dy(obj.idx,:) = imstack.results.dy_internal;
+            if ~isempty(imstack.logmask) && (length(imstack.axis.src.z) == length(imstack.logmask))
+                obj.theta(obj.idx,imstack.logmask) = imstack.results.theta_internal;
+                obj.dx(obj.idx,imstack.logmask) = imstack.results.dx_internal;
+                obj.dy(obj.idx,imstack.logmask) = imstack.results.dy_internal;
+            else
+                obj.theta(obj.idx,:) = imstack.results.theta_internal;
+                obj.dx(obj.idx,:) = imstack.results.dx_internal;
+                obj.dy(obj.idx,:) = imstack.results.dy_internal;
+            end
+            
             if imstack.img.ROIenabled
                 obj.xc(obj.idx,:) = interp1(imstack.axis.src.x, imstack.img.xstartOffset + imstack.moments.denoised.xc);
                 obj.yc(obj.idx,:) = interp1(imstack.axis.src.y, imstack.img.ystartOffset + imstack.moments.denoised.yc);

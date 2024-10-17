@@ -120,11 +120,18 @@ classdef resultsxy
                 warning('second argument is not the correct class')
                 error('fit_iso11146 must be called with arguments (a,b) where a is class resultsxy and b is class imgstack.imstack')
             end
-            
-            obj.z_internal = imstack.zPos; % setter triggers obj.verifyZpos
-            obj.dx_internal = imstack.moments.denoised.dx*imstack.pixelpitch;
-            obj.dy_internal = imstack.moments.denoised.dy*imstack.pixelpitch;
-            obj.theta_internal = imstack.moments.denoised.theta;
+                        
+            if ~isempty(imstack.logmask) && (length(imstack.axis.src.z) == length(imstack.logmask))
+                obj.z_internal = imstack.axis.src.z(imstack.logmask); % setter triggers obj.verifyZpos
+                obj.dx_internal = imstack.moments.denoised.dx(imstack.logmask)*imstack.pixelpitch;
+                obj.dy_internal = imstack.moments.denoised.dy(imstack.logmask)*imstack.pixelpitch;
+                obj.theta_internal = imstack.moments.denoised.theta(imstack.logmask);
+            else
+                obj.z_internal = imstack.axis.src.z; % setter triggers obj.verifyZpos
+                obj.dx_internal = imstack.moments.denoised.dx*imstack.pixelpitch;
+                obj.dy_internal = imstack.moments.denoised.dy*imstack.pixelpitch;
+                obj.theta_internal = imstack.moments.denoised.theta;                    
+            end
             
             % get ellipticity (ISO def)
             sortedDiameters = sort([obj.dx_internal; obj.dy_internal],1);
