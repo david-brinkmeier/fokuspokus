@@ -121,7 +121,7 @@ classdef resultsxy
                 error('fit_iso11146 must be called with arguments (a,b) where a is class resultsxy and b is class imgstack.imstack')
             end
                         
-            if ~isempty(imstack.logmask) && (length(imstack.axis.src.z) == length(imstack.logmask))
+            if imstack.logmaskIsValid
                 obj.z_internal = imstack.axis.src.z(imstack.logmask); % setter triggers obj.verifyZpos
                 obj.dx_internal = imstack.moments.denoised.dx(imstack.logmask)*imstack.pixelpitch;
                 obj.dy_internal = imstack.moments.denoised.dy(imstack.logmask)*imstack.pixelpitch;

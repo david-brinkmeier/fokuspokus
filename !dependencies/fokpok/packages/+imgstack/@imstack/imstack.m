@@ -32,13 +32,14 @@ classdef imstack
         time            (1,1)   double
         zPos            (1,:)   double
         workingFolder   (1,:)   char
+        logmaskIsValid  (1,1)   logical
     end
     
     properties (Dependent, GetAccess = private)
-        currentIMG          double % used to update/error check writing obj.img.src,
-                                   % otherwise essentially pointer to obj.img.src
-        denoisedIMG         double % used to update/error check writing obj.img.denoised
-                                   % otherwise essentially pointer to obj.img.denoised
+        currentIMG              double % used to update/error check writing obj.img.src,
+                                        % otherwise essentially pointer to obj.img.src
+        denoisedIMG             double % used to update/error check writing obj.img.denoised
+                                        % otherwise essentially pointer to obj.img.denoised
     end
     
     methods
@@ -153,8 +154,15 @@ classdef imstack
         
         function val = get.currentIMG(obj)
             val = obj.img.src; % only handle to img.src
-            if ~isempty(obj.logmask) && (length(obj.axis.src.z) == length(obj.logmask))
+            if obj.logmaskIsValid
                 val = obj.img.src(:,:,obj.logmask);    
+            end
+        end
+        
+        function val = get.logmaskIsValid(obj)
+            val = false;
+            if ~isempty(obj.logmask) && (length(obj.axis.src.z) == length(obj.logmask))
+                val = true;
             end
         end
         

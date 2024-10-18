@@ -27,8 +27,12 @@ ROIs(:) = {mask()};
 cog_img = img;
 for i = 1:len
     tmp = cog_img(:,:,i);
-    tmp(tmp < .8*max(tmp(:))) = 0;
-    cog_img(:,:,i) = tmp;
+    if obj.logmaskIsValid && (obj.logmask(i) == false)
+        continue; % in this case better not do anything..image is corrupted
+    else
+        tmp(tmp < .66*max(tmp(:))) = 0;
+    end
+    cog_img(:,:,i) = tmp; 
 end
 
 % now get centered first moments
@@ -86,6 +90,7 @@ for i = 1:len
     energy = nan(1,length(vect)-1);
     devgrad = nan(1,length(vect)-1);
     imgrad = nan(1,length(vect)-1);
+    bCondDone = false;
     
     for j = 1:length(vect)-1
         outer = xx < xc(i)-vect(j+1)/2 | xx > xc(i)+vect(j+1)/2 | yy < yc(i)-vect(j+1)/2 | yy > yc(i)+vect(j+1)/2; % outer selection
@@ -108,12 +113,13 @@ for i = 1:len
             cond3 = energy > sensitivity(3)/100;
             condition = cond1 & cond2 & cond3;
             if any(condition)
+                bCondDone = true;
                 break
             end
         end
     end
     
-    if ~obj.settings.ROI.shortCircuit
+    if ~bCondDone
         devgrad(1:end-1) = abs(diff(dev-min(dev))); % smallest value should be 0
         devgrad = devgrad/max(devgrad); % normalize
         imgrad(1:end-1) = abs(diff(imintegral)); % dont care about negative values

@@ -223,9 +223,9 @@ classdef mask
             if size(img,3) > 1
                 error('image must be 2D')
             end
-            if ~isequal(size(img),[mask.ymax, mask.xmax])
-                error('to-be-cropped image and mask specification do not mach')
-            end
+%             if ~isequal(size(img),[mask.ymax, mask.xmax])
+%                 error('to-be-cropped image and mask specification do not mach')
+%             end
             if ~isempty(len)
                 if any(len < [mask.lenx+1, mask.leny+1])
                     error('len must exceed x/y dimensions of mask!')

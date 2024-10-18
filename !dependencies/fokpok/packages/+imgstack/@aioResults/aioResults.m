@@ -164,7 +164,7 @@ classdef aioResults
             end
             
             % data (Table2), only available in output struct file
-            if ~isempty(imstack.logmask) && (length(imstack.axis.src.z) == length(imstack.logmask))
+            if imstack.logmaskIsValid
                 obj.theta(obj.idx,imstack.logmask) = imstack.results.theta_internal;
                 obj.dx(obj.idx,imstack.logmask) = imstack.results.dx_internal;
                 obj.dy(obj.idx,imstack.logmask) = imstack.results.dy_internal;
