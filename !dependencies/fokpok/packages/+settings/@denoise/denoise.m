@@ -88,7 +88,7 @@ classdef denoise < handle
         end
         
         function set.median(obj,input)
-            if ~isdeployed && (~contains(struct2array(ver),'Image Processing Toolbox') || ~license('test','image_toolbox')) % this confirms BOTH license and actual install of toolbox exists
+            if ~isdeployed && ~license('test','image_toolbox') % this confirms BOTH license and actual install of toolbox exists
                 warndlg('\fontsize{11}2D Median filter is unavailable because Image Processing Toolbox is missing or unlicensed.','settings.denoise',struct('Interpreter','tex','WindowStyle','modal'));
                 obj.median = 1;
                 return
