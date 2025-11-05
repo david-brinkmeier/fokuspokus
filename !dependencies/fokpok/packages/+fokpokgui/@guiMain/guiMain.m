@@ -272,11 +272,19 @@ classdef guiMain < handle
                     case 'fokuspokus'
                         if obj.h.pb.process.Value && (obj.imstack.counter == 1)
                             obj.gige.resetCounter();
+                            exposureMetricMinMax = [0.5*obj.gige.grayLevelLims(2), 0.95*obj.gige.grayLevelLims(2)];
                         end
                         % profile on
                         while obj.h.pb.process.Value
                             obj.h.fig.Name = sprintf('%i',obj.imstack.counter);
                             obj.gige.grabFrame();
+                            
+                            % if this is computationally too heavy count the frames and don't do it every frame
+                            currentExposureIndicator = obj.gige.calcExposureResult(obj);
+                            if (currentExposureIndicator < exposureMetricMinMax(1)) || (currentExposureIndicator > exposureMetricMinMax(2))
+                                obj.gige.findExposure(true) % this is modal and WILL freeze the analysis!
+                            end
+                            
                             obj.imstack.time = obj.gige.time;
                             obj.imstack = obj.imstack.process(obj.gige.IMGstackSorted);
                             obj.results = obj.results.record(obj.imstack);

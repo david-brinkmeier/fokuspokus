@@ -45,7 +45,7 @@ timestep = 1; % 1 frame step
 run = true; % breaks out of loop
 iter_extra = 3; % extra iterations after reaching goal
 iter = 0; % init
-maxframes = 30+iter_extra;
+maxframes = 50+iter_extra;
 
 % for debug plot
 result = nan(1,maxframes);

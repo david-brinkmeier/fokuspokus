@@ -580,7 +580,7 @@ classdef gcam < handle
         % declared externally, etalonSpec isa etalons / hold beam splitter info
         abort = ROIselector(obj,etalonSpec)
         % declared externally
-        abort = findExposure(obj)
+        abort = findExposure(obj, bSilent)
         % declared externally
         abort = makeBackGroundCorrection(obj)
         

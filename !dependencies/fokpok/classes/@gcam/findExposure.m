@@ -1,4 +1,4 @@
-function abort = findExposure(obj)
+function abort = findExposure(obj, bSilent)
 abort = false;
 
 % init info box
@@ -37,13 +37,13 @@ if ~abort
     end
 end
 
-if ~abort
+if ~abort && ~bSilent
     [abort,tryShutter] = askUser(obj.shutter);
 end
 
 % init
 iteration = 1;
-maxIteration = 15;
+maxIteration = 20;
 done = false;
 apertureOpen = true;
 
@@ -54,25 +54,27 @@ while ~done && ~abort
                                 iteration,maxIteration);
     obj.cliBox.titlePersistent = 1;
     
-    % verify blackLevel / average value is OK for current exposure
-    if apertureOpen
-        apertureOpen = askUserBlockAperture(obj.shutter, tryShutter);
-    end
-    
-    if ~obj.isInRange(obj.cam.Average_Value,[240,400])
-        obj.cliBox.addText('BlackLevel is not within acceptable range..\n')
-        success_blacklevel = obj.PI_control('blacklevel',10,0.025,0,0);
-        if ~success_blacklevel
-            abort = true;
-            obj.cliBox.type = 'warn';
-            obj.cliBox.addText('AutoExposure fail.\n')
-            obj.cliBox.addText('Check BlackLevel report. Too much or too little signal.')
-        else
-            obj.cliBox.newLine();
+    if ~bSilent % determination of black level requires closed aperture, just skip
+        % verify blackLevel / average value is OK for current exposure
+        if apertureOpen
+            apertureOpen = askUserBlockAperture(obj.shutter, tryShutter);
         end
-    else
-        obj.cliBox.addText('\nBlacklevel is within acceptable parameters.\n')
-        pause(1) % without this delay user tends to think nothing happened IF blacklevel was fine already (instant jump to open aperture request)
+        
+        if ~obj.isInRange(obj.cam.Average_Value,[240,400])
+            obj.cliBox.addText('BlackLevel is not within acceptable range..\n')
+            success_blacklevel = obj.PI_control('blacklevel',10,0.025,0,0);
+            if ~success_blacklevel
+                abort = true;
+                obj.cliBox.type = 'warn';
+                obj.cliBox.addText('AutoExposure fail.\n')
+                obj.cliBox.addText('Check BlackLevel report. Too much or too little signal.')
+            else
+                obj.cliBox.newLine();
+            end
+        else
+            obj.cliBox.addText('\nBlacklevel is within acceptable parameters.\n')
+            pause(1) % without this delay user tends to think nothing happened IF blacklevel was fine already (instant jump to open aperture request)
+        end
     end
     
     % try exposure
@@ -93,15 +95,19 @@ while ~done && ~abort
     % if blacklevel and exposure is in range then we're done
     if success_exposure
         obj.wait4update(2)
+        obj.cliBox.addText('AutoExposure success.\n')
         
-        if apertureOpen
+        if ~bSilent && apertureOpen
             apertureOpen = askUserBlockAperture(obj.shutter, tryShutter);
         end
         
-        if obj.isInRange(obj.cam.Average_Value,[240,400])
+        if bSilent
             done = true;
-            obj.cliBox.addText('AutoExposure success.\n')
+        end
+        
+        if ~bSilent || obj.isInRange(obj.cam.Average_Value,[240,400])
             obj.cliBox.addText('Exposure / Blacklevel within acceptable parameters.')
+            done = true;
         end
     end
     
@@ -124,81 +130,80 @@ obj.cliBox.kill
 end
 
 function [abort,tryShutter] = askUser(shutter)
-abort = false;
-answer = questdlg('\fontsize{12}Start AutoExposure?',...
-    'AutoExposure','Yes','No',...
-    struct('Interpreter','tex','Default','Yes'));
-switch answer
-    case {'No',''}
-        abort = true;
-end
-
-if ~abort
-    
-    shutter.connect; % try to establish connection to ThorlabsELL6K  
-    if shutter.isConnected
-        tryShutter = true;
-        str = {'\fontsize{12}The laser must be ON now.','The shutter will OPEN and BLOCK the aperture until convergence is reached.'};
-    else
-        tryShutter = false;
-        str = {'\fontsize{12}The laser must be ON now and you must manually, and in an alternating fashion, OPEN and BLOCK the aperture until convergence is reached.','',...
-            'You will be prompted to OPEN and BLOCK the aperture.'}; 
-    end
-    
-    answer = questdlg(str,...
-        'AutoExposure','OK, start now!',...
-        struct('Interpreter','tex','Default','OK, start now!'));
+    abort = false;
+    answer = questdlg('\fontsize{12}Start AutoExposure?',...
+        'AutoExposure','Yes','No',...
+        struct('Interpreter','tex','Default','Yes'));
     switch answer
-        case '' % abort [x] click
+        case {'No',''}
             abort = true;
     end
-end
-
+    
+    if ~abort
+        
+        shutter.connect; % try to establish connection to ThorlabsELL6K  
+        if shutter.isConnected
+            tryShutter = true;
+            str = {'\fontsize{12}The laser must be ON now.','The shutter will OPEN and BLOCK the aperture until convergence is reached.'};
+        else
+            tryShutter = false;
+            str = {'\fontsize{12}The laser must be ON now and you must manually, and in an alternating fashion, OPEN and BLOCK the aperture until convergence is reached.','',...
+                'You will be prompted to OPEN and BLOCK the aperture.'}; 
+        end
+        
+        answer = questdlg(str,...
+            'AutoExposure','OK, start now!',...
+            struct('Interpreter','tex','Default','OK, start now!'));
+        switch answer
+            case '' % abort [x] click
+                abort = true;
+        end
+    end
 end
 
 function [apertureOpen,abort] = askUserBlockAperture(shutter, tryShutter)
-abort = false;
-
-% try automatic shutter
-if tryShutter % if we dont use this then each call to moveshutter costs > 1s
-    shutter.moveShutter('closed');
-    if shutter.isInPositionClosed
-        apertureOpen = false;
-        return
+    abort = false;
+    
+    % try automatic shutter
+    if tryShutter % if we dont use this then each call to moveshutter costs > 1s
+        shutter.moveShutter('closed');
+        if shutter.isInPositionClosed
+            apertureOpen = false;
+            return
+        end
     end
-end
-
-% otherwise manual
-answer = questdlg('\fontsize{12}The aperture is blocked / closed? [Enter = Yes]',...
-    'AutoExposure: BlackLevel','Yes',...
-    struct('Interpreter','tex','Default','Yes'));
-switch answer
-    case {''}
-        abort = true;
-end
-apertureOpen = false;
+    
+    % otherwise manual
+    answer = questdlg('\fontsize{12}The aperture is blocked / closed? [Enter = Yes]',...
+        'AutoExposure: BlackLevel','Yes',...
+        struct('Interpreter','tex','Default','Yes'));
+    switch answer
+        case {''}
+            abort = true;
+    end
+    apertureOpen = false;
 end
 
 function [apertureOpen,abort] = askUserOpenAperture(shutter, tryShutter)
-abort = false;
-
-% try automatic shutter
-if tryShutter % if we dont use this then each call to moveshutter costs > 1s
-    shutter.moveShutter('open');
-    if shutter.isInPositionOpen
-        apertureOpen = true;
-        return
+    abort = false;
+    
+    % try automatic shutter
+    if tryShutter % if we dont use this then each call to moveshutter costs > 1s
+        shutter.moveShutter('open');
+        if shutter.isInPositionOpen
+            apertureOpen = true;
+            return
+        end
     end
-end
-
-% otherwise manual
-answer = questdlg('\fontsize{12}The aperture is open? [Enter = Yes]',...
-    'AutoExposure: Exposure','Yes',...
-    struct('Interpreter','tex','Default','Yes'));
-switch answer
-    case {''}
-        abort = true;
-end
-apertureOpen = true;
+    
+    % otherwise manual
+    answer = questdlg('\fontsize{12}The aperture is open? [Enter = Yes]',...
+        'AutoExposure: Exposure','Yes',...
+        struct('Interpreter','tex','Default','Yes'));
+    switch answer
+        case {''}
+            abort = true;
+    end
+    apertureOpen = true;
 end
 

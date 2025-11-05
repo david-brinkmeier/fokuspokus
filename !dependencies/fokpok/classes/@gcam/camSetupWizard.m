@@ -42,9 +42,9 @@ if ~abort
         abort = obj.findValidPixels();
     end
     if ~abort
-        cliBox.addText('[1/4] Hotpixel Detection succesful.\n')
+        cliBox.addText('[1/3] Hotpixel Detection succesful.\n')
     else
-        cliBox.addText('[1/4] Hotpixel Detection fail / abort.\n')
+        cliBox.addText('[1/3] Hotpixel Detection fail / abort.\n')
         cliBox.type = 'error';
     end
 end
@@ -59,9 +59,9 @@ if ~abort
         abort = obj.ROIselector(etalonSpec);
     end
     if ~abort
-        cliBox.addText('[2/4] BeamGrid-ROIs selected.\n')
+        cliBox.addText('[2/3] BeamGrid-ROIs selected.\n')
     else
-        cliBox.addText('[2/4] BeamGrid-ROIs selection fail / abort.\n')
+        cliBox.addText('[2/3] BeamGrid-ROIs selection fail / abort.\n')
         cliBox.type = 'error';
     end
 end
@@ -71,27 +71,27 @@ if ~abort
     cliBox.addText('Starting AutoExposure...\n')
     cliBox.addText('Optimization criteria: Validpixels inside ROIs!\n')
     pause(0.5)
-    abort = obj.findExposure();
+    abort = obj.findExposure(false);
     if ~abort
-        cliBox.addText('[3/4] AutoExposure succesful.\n')
+        cliBox.addText('[3/3] AutoExposure succesful.\n')
     else
-        cliBox.addText('[3/4] AutoExposure fail / abort.\n')
+        cliBox.addText('[3/3] AutoExposure fail / abort.\n')
         cliBox.type = 'error';
     end
 end
 
 % step4: apply/execute blacklevel correction; Aperture Open + Laser OFF!
-if ~abort
-    cliBox.addText('Starting Background/Hotpixel correction...\n')
-    pause(0.5)
-    abort = obj.makeBackGroundCorrection();
-    if ~abort
-        cliBox.addText('[4/4] Background/Hotpixel correction succesful.\n')
-    else
-        cliBox.addText('[4/4] Background/Hotpixel correction fail / abort.\n')
-        cliBox.type = 'error';
-    end
-end
+% if ~abort
+%     cliBox.addText('Starting Background/Hotpixel correction...\n')
+%     pause(0.5)
+%     abort = obj.makeBackGroundCorrection();
+%     if ~abort
+%         cliBox.addText('[4/4] Background/Hotpixel correction succesful.\n')
+%     else
+%         cliBox.addText('[4/4] Background/Hotpixel correction fail / abort.\n')
+%         cliBox.type = 'error';
+%     end
+% end
 
 if exist('cliBox','var')
     cliBox.exitButton = 1;

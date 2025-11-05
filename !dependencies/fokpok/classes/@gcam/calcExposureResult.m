@@ -21,6 +21,6 @@ if nargin == 1 || ~isnumeric(extracted)
     end
 end
 sorted = sort(extracted(:),'descend');
-% assume mean of top 30 values is optimization objective
-val = mean(sorted(1:30));
+% assume mean of top 100 values is optimization objective
+val = mean(sorted(1:100));
 end
