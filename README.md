@@ -1,4 +1,4 @@
-# ISO11146 Laser Beam Analyzer
+# ISO11146 Laser Beam Analyzer --- IFSW Leo special, autoexposure w/ cam
 
 ![](!docs/img/0_splash.png?raw=true)
 
